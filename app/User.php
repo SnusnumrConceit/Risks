@@ -16,7 +16,8 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'email', 'password', 'appointment',
+        'last_name', 'first_name', 'middle_name',
     ];
 
     /**
@@ -28,12 +29,49 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
+    protected $dates = [
+        'created_at', 'updated_at'
+    ];
+
     /**
      * The attributes that should be cast to native types.
      *
      * @var array
      */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
+//    protected $casts = [
+//        'email_verified_at' => 'datetime',
+//    ];
+
+    /**
+     * Роль
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
+    }
+
+    /**
+     * Права
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function permissions()
+    {
+        return $this->belongsToMany(Permission::class, 'permission_role', 'role_id', 'role_id', 'id', 'id');
+    }
+
+    /**
+     * Наличие права
+     *
+     * @param string $permission
+     * @return bool
+     */
+    public function hasPermission(string $permission) : bool
+    {
+        if ( $this->permissions->contains('name', '=', 'full') ) return true;
+
+        return $this->permissions->contains('name', '=', $permission);
+    }
 }

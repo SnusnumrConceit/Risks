@@ -16,7 +16,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'email', 'password', 'appointment',
+        'email', 'password', 'appointment', 'uuid',
         'last_name', 'first_name', 'middle_name',
     ];
 
@@ -32,6 +32,16 @@ class User extends Authenticatable
     protected $dates = [
         'created_at', 'updated_at'
     ];
+
+    /**
+     * Поле, по которому происходит сопоставление модели в url
+     *
+     * @return string
+     */
+    public function getRouteKeyName()
+    {
+        return 'uuid';
+    }
 
     /**
      * The attributes that should be cast to native types.

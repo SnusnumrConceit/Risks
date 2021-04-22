@@ -23,13 +23,13 @@ class CreateUsersTable extends Migration
             $table->string('middle_name', 40);
             $table->string('password');
             $table->string('appointment', 50);
-            $table->unsignedTinyInteger('role_id')->nullable();
+            $table->uuid('role_uuid')->nullable();
 //            $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();
             $table->timestamps();
 
-            $table->foreign('role_id')
-                ->references('id')
+            $table->foreign('role_uuid')
+                ->references('uuid')
                 ->on('roles')
                 ->onDelete('SET NULL');
         });
@@ -47,7 +47,7 @@ class CreateUsersTable extends Migration
         DB::statement('ALTER TABLE users DROP INDEX fio_index');
 
         Schema::table('users', function (Blueprint $table) {
-            $table->dropForeign(['role_id']);
+            $table->dropForeign(['role_uuid']);
             $table->dropIndex(['uuid']);
         });
 

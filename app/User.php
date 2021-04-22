@@ -16,7 +16,8 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'email', 'password', 'appointment', 'uuid',
+        'email', 'password', 'appointment',
+        'uuid', 'role_uuid',
         'last_name', 'first_name', 'middle_name',
     ];
 
@@ -59,7 +60,7 @@ class User extends Authenticatable
      */
     public function role()
     {
-        return $this->belongsTo(Role::class);
+        return $this->belongsTo(Role::class, 'role_uuid', 'uuid');
     }
 
     /**
@@ -73,6 +74,97 @@ class User extends Authenticatable
     }
 
     /**
+     * ФИО
+     *
+     * @return string
+     */
+    public function getFullNameAttribute()
+    {
+        return trim(ucfirst($this->last_name) . ' ' . ucfirst($this->first_name) . ' ' . ucfirst($this->middle_name));
+    }
+
+    /**
+     * Сокращённое имя
+     * - Имя Ф.
+     *
+     * @return string
+     */
+    public function getShortNameAttribute()
+    {
+        return trim(ucfirst($this->first_name) . ' ' . ucfirst($this->last_name)[0]);
+    }
+
+    /**
+     * Фамилия с заглавной буквы
+     *
+     * @return string
+     */
+    public function getLastNameAttribute()
+    {
+        return ucfirst($this->attributes['last_name']);
+    }
+
+    /**
+     * Имя с заглавной буквы
+     *
+     * @return string
+     */
+    public function getFirstNameAttribute()
+    {
+        return ucfirst($this->attributes['first_name']);
+    }
+
+    /**
+     * Отчество с заглавной буквы
+     *
+     * @return string
+     */
+    public function getMiddleNameAttribute()
+    {
+        return ucfirst($this->attributes['middle_name']);
+    }
+
+    /**
+     * Сеттер фамилии
+     *
+     * @param $value
+     */
+    public function setLastNameAttribute($value)
+    {
+        $this->attributes['last_name'] = strtolower($value);
+    }
+
+    /**
+     * Сеттер имени
+     *
+     * @param $value
+     */
+    public function setFirstNameAttribute($value)
+    {
+        $this->attributes['first_name'] = strtolower($value);
+    }
+
+    /**
+     * Сеттер отчества
+     *
+     * @param $value
+     */
+    public function setMiddleNameAttribute($value)
+    {
+        $this->attributes['middle_name'] = strtolower($value);
+    }
+
+    /**
+     * Сеттер пароля
+     *
+     * @param $value
+     */
+    public function setPasswordAttribute($value)
+    {
+        $this->attributes['password'] = bcrypt($value);
+    }
+
+    /**
      * Наличие права
      *
      * @param string $permission
@@ -83,5 +175,22 @@ class User extends Authenticatable
         if ( $this->permissions->contains('name', '=', 'full') ) return true;
 
         return $this->permissions->contains('name', '=', $permission);
+    }
+
+    /**
+     * Поиск по пользователю:
+     * - полное вхождение по ФИО
+     * - email
+     * - должности
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param string $keyword
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeSearch($query, string $keyword)
+    {
+        return $query->where('email', 'LIKE', $keyword . '%')
+            ->orWhere('appointment', 'LIKE', $keyword . '%')
+            ->orWhereRaw("MATCH(last_name,first_name,middle_name) AGAINST('+{$keyword}' IN BOOLEAN MODE)");
     }
 }

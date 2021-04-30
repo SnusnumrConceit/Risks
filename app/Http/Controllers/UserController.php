@@ -112,7 +112,7 @@ class UserController extends Controller
         $user->update($request->validated());
 
         return redirect()->route('users.show', ['user' => $user->uuid])
-            ->withSuccess(__('users.edited'));
+            ->withSuccess(__('users.updated'));
     }
 
     /**

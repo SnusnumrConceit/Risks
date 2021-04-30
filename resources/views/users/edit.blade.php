@@ -2,8 +2,10 @@
 
 @section('content')
     <div class="card p-4">
-        <div class="card-title ml-4 border-bottom">
-            <div class="h2">{{ $user->full_name }}</div>
+        <div class="card-title border-bottom">
+            <div class="h2">
+                @include('common.back', ['title' => $user->full_name])
+            </div>
         </div>
         <div class="card-body col-12">
             <form action="{{ route('users.update', ['user' => $user]) }}" method="POST">

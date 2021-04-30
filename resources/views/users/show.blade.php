@@ -2,8 +2,10 @@
 
 @section('content')
     <div class="card p-4">
-        <div class="card-title ml-4 border-bottom">
-            <div class="h2">{{ $user->full_name }}</div>
+        <div class="card-title border-bottom">
+            <div class="h2">
+                @include('common.back', ['title' => $user->full_name])
+            </div>
         </div>
         <div class="card-body row">
             <div class="form-group col-lg-6">
@@ -30,6 +32,9 @@
                 <legend>{{ __('roles.role') }}</legend>
                 <span>{{ optional($user->role)->name }}</span>
             </div>
+        </div>
+        <div class="form-group row ml-3">
+            @include('common.actions', ['entityName' => 'user', 'entity' => $user])
         </div>
     </div>
 @endsection

@@ -1,9 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="row col-12 ml-2">
+    <div class="row col-12">
         <div class="h2">
-            {{ __('users.users') }}
+            @include('common.back', ['title' => __('users.users')])
 
             @can('create', \App\User::class)
                 <a href="{{ route('users.create') }}" class="btn btn-sm btn-outline-success">
@@ -74,20 +74,7 @@
                         <td>{{ $user->updated_at->format('d.m.Y H:i:s') }}</td>
                         <td>
                             <div class="row col justify-content-end">
-                                @can('update', $user)
-                                    <a href="{{ route('users.edit', ['user' => $user]) }}" class="btn btn-outline-primary">
-                                        {{ __('ui.edit') }}
-                                    </a>
-                                @endcan
-                                @can('delete', $user)
-                                    <form method="POST" action="{{ route('users.destroy', ['user' => $user]) }}" class="ml-2">
-                                        @csrf
-
-                                        <button class="btn btn-outline-danger" value="DELETE" name="_method">
-                                            {{ __('ui.remove') }}
-                                        </button>
-                                    </form>
-                                @endcan
+                                @include('common.actions', ['entityName' => 'user', 'entity' => $user])
                             </div>
                         </td>
                     </tr>

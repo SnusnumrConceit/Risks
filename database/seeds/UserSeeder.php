@@ -12,13 +12,13 @@ class UserSeeder extends Seeder
     public function run()
     {
         \App\User::updateOrCreate([
-            'last_name'   => 'Admin',
-            'first_name'  => '',
+            'last_name'   => '',
+            'first_name'  => 'Admin',
             'middle_name' => '',
             'appointment' => '',
-            'password'    => bcrypt('test1234'),
+            'password'    => 'test1234',
             'email'       => 'test@test.ru',
             'role_uuid'   => \App\Role::whereName('Администратор')->first()->uuid
-        ], ['last_name' => 'Admin']);
+        ], ['email' => 'test@test.ru']);
     }
 }

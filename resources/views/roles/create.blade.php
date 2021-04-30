@@ -2,8 +2,10 @@
 
 @section('content')
     <div class="card p-4">
-        <div class="card-title ml-4 border-bottom">
-            <div class="h2">{{ __('roles.new') }}</div>
+        <div class="card-title border-bottom">
+            <div class="h2">
+                @include('common.back', ['title' => __('roles.new')])
+            </div>
         </div>
         <div class="card-body">
             <form action="{{ route('roles.store') }}" method="POST" class="row">

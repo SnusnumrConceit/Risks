@@ -1,9 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="row col-12 ml-2">
+    <div class="row col-12">
         <div class="h2">
-            {{ __('roles.roles') }}
+            @include('common.back', ['title' => __('roles.roles')])
 
             @can('create', \App\Role::class)
                 <a href="{{ route('roles.create') }}" class="btn btn-sm btn-outline-success">
@@ -56,20 +56,7 @@
                         <td>{{ $role->updated_at->format('d.m.Y H:i:s') }}</td>
                         <td>
                             <div class="row col justify-content-end">
-                                @can('update', $role)
-                                    <a href="{{ route('roles.edit', ['role' => $role]) }}" class="btn btn-outline-primary">
-                                        {{ __('ui.edit') }}
-                                    </a>
-                                @endcan
-                                @can('delete', $role)
-                                    <form method="POST" action="{{ route('roles.destroy', ['role' => $role]) }}" class="ml-2">
-                                        @csrf
-
-                                        <button class="btn btn-outline-danger" value="DELETE" name="_method">
-                                            {{ __('ui.remove') }}
-                                        </button>
-                                    </form>
-                                @endcan
+                                @include('common.actions', ['entityName' => 'role', 'entity' => $role])
                             </div>
                         </td>
                     </tr>

@@ -2,13 +2,21 @@
 
 @section('content')
     <div class="card p-4">
-        <div class="card-title ml-4 border-bottom">
-            <div class="h2">{{ $role->name }}</div>
+        <div class="card-title border-bottom">
+            <div class="h2">
+                @include('common.back', ['title' => $role->name])
+            </div>
         </div>
         <div class="card-body row">
             <div class="form-group col-lg-4">
-                <legend>{{ __('roles.name') }}</legend>
-                <span>{{ $role->name }}</span>
+                <div class="form-group">
+                    <legend>{{ __('roles.name') }}</legend>
+                    <span>{{ $role->name }}</span>
+                </div>
+
+                <div class="form-group row col">
+                    @include('common.actions', ['entityName' => 'role', 'entity' => $role])
+                </div>
             </div>
 
             <div class="form-group col-lg-8 row">

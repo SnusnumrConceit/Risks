@@ -2,8 +2,10 @@
 
 @section('content')
     <div class="card p-4">
-        <div class="card-title ml-4 border-bottom">
-            <div class="h2">{{ $role->name }}</div>
+        <div class="card-title border-bottom">
+            <div class="h2">
+                @include('common.back', ['title' => $role->name])
+            </div>
         </div>
         <div class="card-body">
             <form action="{{ route('roles.update', ['role' => $role]) }}" method="POST" class="row">

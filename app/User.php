@@ -70,7 +70,7 @@ class User extends Authenticatable
      */
     public function permissions()
     {
-        return $this->belongsToMany(Permission::class, 'permission_role', 'role_id', 'role_id', 'id', 'id');
+        return $this->role->permissions();
     }
 
     /**
@@ -91,7 +91,7 @@ class User extends Authenticatable
      */
     public function getShortNameAttribute()
     {
-        return trim(ucfirst($this->first_name) . ' ' . ucfirst($this->last_name)[0]);
+        return trim(ucfirst($this->first_name) . ' ' . mb_substr(ucfirst($this->last_name), 0 , 1));
     }
 
     /**

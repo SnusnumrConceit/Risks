@@ -27,37 +27,7 @@ class RiskController extends Controller
     {
         $this->authorize('viewAny', Risk::class);
 
-        $risksQuery = Risk::query();
-
-        $risksQuery->when($request->keyword, function ($query, $keyword) {
-            $escapedKeyword = preg_replace('/[^\p{L}\p{N}_]+/u', ' ', $keyword);
-            $escapedKeyword = preg_replace('/[+\-><\(\)~*\"@]+/', ' ', $escapedKeyword);
-
-           return $query->whereRaw("MATCH(name,description) AGAINST('+{$escapedKeyword}' IN BOOLEAN MODE)");
-        });
-
-        $risksQuery->when($request->level, function ($query, $level) {
-            return $query->where('level', $level);
-        });
-
-        $risksQuery->when($request->status, function ($query, $status) {
-            return $query->where('status', $status);
-        });
-
-        $risksQuery->when($request->created_at, function ($query, $created_at) {
-            return $query->where(function($query) use ($created_at) {
-                return $query->where('created_at', '>=', $created_at . ' 00:00:00')
-                    ->where('expired_at', '<=', request('expired_at') . ' 23:59:59');
-            });
-        });
-
-        $risksQuery->when($request->likelihood, function ($query, $likelihood) {
-            return $query->where('likelihood', $likelihood);
-        });
-
-        $risksQuery->when($request->impact, function ($query, $impact) {
-           return $query->where('impact', $impact);
-        });
+        $risksQuery = Risk::search($request);
 
         $risks = $risksQuery->paginate();
 

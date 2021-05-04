@@ -30,7 +30,10 @@ class RiskController extends Controller
         $risksQuery = Risk::query();
 
         $risksQuery->when($request->keyword, function ($query, $keyword) {
-           return $query->whereRaw("MATCH(name,description) AGAINST('+{$keyword}' IN BOOLEAN MODE)");
+            $escapedKeyword = preg_replace('/[^\p{L}\p{N}_]+/u', ' ', $keyword);
+            $escapedKeyword = preg_replace('/[+\-><\(\)~*\"@]+/', ' ', $escapedKeyword);
+
+           return $query->whereRaw("MATCH(name,description) AGAINST('+{$escapedKeyword}' IN BOOLEAN MODE)");
         });
 
         $risksQuery->when($request->level, function ($query, $level) {

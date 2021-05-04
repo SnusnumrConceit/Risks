@@ -189,8 +189,11 @@ class User extends Authenticatable
      */
     public function scopeSearch($query, string $keyword)
     {
+        $escapedKeyword = preg_replace('/[^\p{L}\p{N}_]+/u', ' ', $keyword);
+        $escapedKeyword = preg_replace('/[+\-><\(\)~*\"@]+/', ' ', $escapedKeyword);
+
         return $query->where('email', 'LIKE', $keyword . '%')
             ->orWhere('appointment', 'LIKE', $keyword . '%')
-            ->orWhereRaw("MATCH(last_name,first_name,middle_name) AGAINST('+{$keyword}' IN BOOLEAN MODE)");
+            ->orWhereRaw("MATCH(last_name,first_name,middle_name) AGAINST('+{$escapedKeyword}' IN BOOLEAN MODE)");
     }
 }

@@ -22,11 +22,11 @@ class IndexRisk extends BaseIndexRequest
             'expired_at' => 'nullable|required_with:created_at|date|after:created_at',
             'likelihood' => 'nullable|integer',
             'impact'     => 'nullable|integer',
-            'factors'     => 'required|array|min:1',
+            'factors'     => 'nullable|array|min:1',
             'factors.*'   => 'required|exists:factors,id',
-            'types'       => 'required|array|min:1',
+            'types'       => 'nullable|array|min:1',
             'types.*'     => 'required|exists:types,id',
-            'divisions'   => 'required|array|min:1',
+            'divisions'   => 'nullable|array|min:1',
             'divisions.*' => 'required|exists:divisions,id',
         ];
     }

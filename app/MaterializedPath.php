@@ -151,4 +151,15 @@ abstract class MaterializedPath extends Model
     {
         return $this->hasMany(static::class, static::PARENT_FIELD,static::ID_FIELD);
     }
+
+    /**
+     * Фильтрация по корневым
+     *
+     * @param $query
+     * @return mixed
+     */
+    public static function scopeOrphans($query)
+    {
+        return $query->whereNull('parent_id');
+    }
 }

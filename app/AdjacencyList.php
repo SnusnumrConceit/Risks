@@ -34,4 +34,15 @@ abstract class AdjacencyList extends Model
     {
         return $this->hasMany(static::class, 'parent_id', 'id');
     }
+
+    /**
+     * Фильтрация по корневым
+     *
+     * @param $query
+     * @return mixed
+     */
+    public static function scopeOrphans($query)
+    {
+        return $query->whereNull('parent_id');
+    }
 }

@@ -24,6 +24,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::group(['middleware' => 'auth'], function () {
     Route::resource('factors', FactorController::class);
     Route::resource('divisions', DivisionController::class);
+    Route::resource('risks', RiskController::class);
     Route::resource('roles', RoleController::class);
     Route::resource('types', TypeController::class);
     Route::resource('users', UserController::class);

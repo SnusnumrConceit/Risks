@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Risk;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -24,6 +25,11 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
+        $schedule->call(function () {
+            Risk::expired()->update([
+                'status' => Risk::STATUS_EXPIRED
+            ]);
+        })->daily();
         // $schedule->command('inspire')->hourly();
     }
 

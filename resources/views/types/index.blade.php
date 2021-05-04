@@ -1,9 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="row col-12 ml-2">
+    <div class="row col-12">
         <div class="h2">
-            {{ __('types.types') }}
+            @include('common.back', ['title' => __('types.types')])
 
             @can('create', \App\Type::class)
                 <a href="{{ route('types.create') }}" class="btn btn-sm btn-outline-success">
@@ -48,20 +48,7 @@
                         <td>{{ $type->name }}</td>
                         <td>
                             <div class="row col justify-content-end">
-                                @can('update', $type)
-                                    <a href="{{ route('types.edit', ['type' => $type]) }}" class="btn btn-outline-primary">
-                                        {{ __('ui.edit') }}
-                                    </a>
-                                @endcan
-                                @can('delete', $type)
-                                    <form method="POST" action="{{ route('types.destroy', ['type' => $type]) }}" class="ml-2">
-                                        @csrf
-
-                                        <button class="btn btn-outline-danger" value="DELETE" name="_method">
-                                            {{ __('ui.remove') }}
-                                        </button>
-                                    </form>
-                                @endcan
+                                @include('common.actions', ['entityName' => 'type', 'entity' => $type])
                             </div>
                         </td>
                     </tr>

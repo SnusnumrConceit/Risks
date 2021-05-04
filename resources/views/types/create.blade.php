@@ -2,8 +2,10 @@
 
 @section('content')
     <div class="card p-4">
-        <div class="card-title ml-4 border-bottom">
-            <div class="h2">{{ __('types.new') }}</div>
+        <div class="card-title border-bottom">
+            <div class="h2">
+                @include('common.back', ['title' => __('types.new')])
+            </div>
         </div>
         <div class="card-body col-lg-4">
             <form action="{{ route('types.store') }}" method="POST">

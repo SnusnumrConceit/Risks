@@ -85,7 +85,10 @@ class FactorController extends Controller
 
         $availableFactors = Factor::whereIn(
             'id',
-            Factor::whereNull('parent_id')->pluck('id')->toArray() // на случай внедрения MaterializedPath array_merge($factor->children->pluck('id')->toArray(), [$factor->id])
+            Factor::whereNull('parent_id')
+                ->where('id', '<>', $factor->id)
+                ->pluck('id')
+                ->toArray() // на случай внедрения MaterializedPath array_merge($factor->children->pluck('id')->toArray(), [$factor->id])
         )->get();
 
         return view('factors.edit', compact('factor', 'availableFactors'));

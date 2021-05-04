@@ -165,7 +165,7 @@
                         <select name="divisions[]" id="" class="form-control">
                             @foreach($divisions as $division)
                                 <option value="{{ $division->id }}"
-                                        @if($risk->divisions->first()->id === $child->id) selected @endif>
+                                        @if($risk->divisions->first()->id === $division->id) selected @endif>
                                     {{ $division->name }}
                                 </option>
                                 @forelse($division->children as $child)

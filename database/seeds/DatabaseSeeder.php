@@ -5,12 +5,17 @@ use Illuminate\Database\Seeder;
 class DatabaseSeeder extends Seeder
 {
     /**
-     * Seed the application's database.
+     * Запуск сидеров
      *
      * @return void
      */
     public function run()
     {
-        // $this->call(UserSeeder::class);
+        $this->call(FactorSeeder::class);
+        $this->call(TypeSeeder::class);
+        $this->call(DivisionSeeder::class);
+        $this->call(PermissionSeeder::class);
+        $this->call(RoleSeeder::class);
+        $this->call(UserSeeder::class);
     }
 }

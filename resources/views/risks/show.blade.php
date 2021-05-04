@@ -74,7 +74,7 @@
         <div class="card-body row">
             <div class="form-group col-lg-6">
                 <legend>{{ __('divisions.division') }}</legend>
-                <span>{{ $risk->divisions->first()->name }}</span>
+                <span>{{ optional($risk->divisions->first())->name ?? '' }}</span>
             </div>
         </div>
         <div class="form-group row ml-3">

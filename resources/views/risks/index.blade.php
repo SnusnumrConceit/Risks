@@ -197,7 +197,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="5">{{ __('risks.empty') }}</td>
+                        <td colspan="8">{{ __('risks.empty') }}</td>
                     </tr>
                 @endforelse
                 </tbody>

@@ -189,7 +189,7 @@
                         <option value="">{{ __('risks.status') }}</option>
                         @foreach(\App\Risk::getStatuses() as $status)
                             <option value="{{ $status }}"
-                                    @if(old('status', $risk->$status) === $status) selected @endif
+                                    @if(old('status', $risk->status) === $status) selected @endif
                             >
                                 {{ __('risks.statuses.' . $status) }}
                             </option>

@@ -69,7 +69,7 @@ class UserController extends Controller
         $user = User::create($request->validated());
 
         return redirect()->route('users.show', ['user' => $user->uuid])
-            ->withSuccess(__('users.edited'));
+            ->withSuccess(__('users.created'));
     }
 
     /**

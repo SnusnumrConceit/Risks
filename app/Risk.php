@@ -90,6 +90,18 @@ class Risk extends Model
     }
 
     /**
+     * Просроченные риски
+     *
+     * @param $q
+     * @return mixed
+     */
+    public static function scopeExpired($q)
+    {
+        return $q->whereIn('status', [self::STATUS_CREATED, self::STATUS_PROCESSING])
+            ->where('expired_at', '>=', now()->toDateString() . ' 00:00:00');
+    }
+
+    /**
      * Поиск по рискам
      *
      * @param $risksQuery

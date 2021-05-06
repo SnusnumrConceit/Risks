@@ -29,7 +29,7 @@ class RiskController extends Controller
 
         $risksQuery = Risk::search($request);
 
-        $risks = $risksQuery->paginate();
+        $risks = $risksQuery->with('divisions')->paginate();
 
         return view('risks.index', compact('risks'));
     }

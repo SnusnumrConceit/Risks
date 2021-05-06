@@ -194,6 +194,7 @@
                 <thead class="thead-light">
                     <tr>
                         <th scope="col">{{ __('risks.name') }}</th>
+                        <th scope="col">{{ __('divisions.division') }}</th>
                         <th scope="col">{{ __('risks.level') }}</th>
                         <th scope="col">{{ __('risks.status') }}</th>
                         <th scope="col">{{ __('risks.likelihood') }}</th>
@@ -211,6 +212,7 @@
                                 {{ $risk->name }}
                             </a>
                         </td>
+                        <td>{{ optional($risk->divisions->first())->name ?? '' }}</td>
                         <td>{{ __('risks.levels.' . $risk->level) }}</td>
                         <td>{{ __('risks.statuses.'. $risk->status) }}</td>
                         <td>{{ $risk->likelihood }}</td>

@@ -38,7 +38,7 @@
                             class="form-control @if($errors->has('parent_id')) is-invalid @endif"
                     >
                         <option value=""></option>
-                        @foreach(\App\Factor::all() as $factor)
+                        @foreach($availableFactors as $factor)
                             <option value="{{ $factor->id }}"
                                     @if(intval(old('parent_id')) === intval($factor->id)) selected @endif
                             >

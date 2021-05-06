@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Factor;
 
+use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreFactor extends FormRequest
@@ -25,7 +26,10 @@ class StoreFactor extends FormRequest
     {
         return [
             'name'      => 'required|between:5,100|unique:factors,name',
-            'parent_id' => 'nullable|exists:factors,id',
+            'parent_id' => [
+                'nullable',
+                Rule::exists('factors', 'id')->whereNull('parent_id'),
+            ],
         ];
     }
 

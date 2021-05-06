@@ -43,7 +43,9 @@ class FactorController extends Controller
      */
     public function create()
     {
-        return view('factors.create');
+        $availableFactors = Factor::orphans()->get();
+
+        return view('factors.create', compact('availableFactors'));
     }
 
     /**

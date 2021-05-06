@@ -23,7 +23,7 @@ class UpdateFactor extends StoreFactor
             'parent_id' => [
                 'nullable',
                 'in:' . implode(',', $this->getOrphansIds()),
-                'exists:factors,id,parent_id,' . null,
+                Rule::exists('factors', 'id')->whereNull('parent_id'),
             ]
         ];
     }

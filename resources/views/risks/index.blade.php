@@ -102,7 +102,7 @@
                     </select>
                 </div>
                 <div class="form-group mt-3 row col-12">
-                    <div class="col-lg-6">
+                    <div class="col-lg-3">
                         <div class="dropdown">
                             <button class="btn btn-outline-dark dropdown-toggle"
                                     type="button"
@@ -129,7 +129,8 @@
                             </ul>
                         </div>
                     </div>
-                    <div class="col-lg-6">
+
+                    <div class="col-lg-3 ml-2">
                         <div class="dropdown">
                             <button class="btn btn-outline-dark dropdown-toggle"
                                     type="button"
@@ -149,6 +150,33 @@
                                                    @if(in_array($factor->id, request('factors', []))) checked @endif
                                             >
                                             {{ $factor->name }}
+                                        </label>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 ml-2">
+                        <div class="dropdown">
+                            <button class="btn btn-outline-dark dropdown-toggle"
+                                    type="button"
+                                    id="factors-filter"
+                                    data-toggle="dropdown"
+                                    aria-haspopup="true"
+                                    aria-expanded="false">
+                                {{ __('divisions.divisions') }}
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="divisions-filter">
+                                @foreach(\App\Division::orderBy('name')->orphans()->get() as $key => $division)
+                                    <li>
+                                        <label class="dropdown-item" for="division-{{ $division->id }}">
+                                            <input type="checkbox"
+                                                   value="{{ $division->id }}"
+                                                   name="divisions[]" id="division-{{ $division->id }}"
+                                                   @if(in_array($division->id, request('divisions', []))) checked @endif
+                                            >
+                                            {{ $division->name }}
                                         </label>
                                     </li>
                                 @endforeach

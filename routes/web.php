@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return redirect()->action([RiskController::class, 'index']);
+    return redirect()->action([\App\Http\Controllers\RiskController::class, 'index']);
 });
 
 Auth::routes();

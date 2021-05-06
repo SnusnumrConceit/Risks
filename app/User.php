@@ -74,6 +74,16 @@ class User extends Authenticatable
     }
 
     /**
+     * Подраделения
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function divisions()
+    {
+        return $this->belongsToMany(Division::class);
+    }
+
+    /**
      * ФИО
      *
      * @return string

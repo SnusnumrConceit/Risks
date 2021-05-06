@@ -165,13 +165,13 @@
                         <select name="divisions[]" id="" class="form-control">
                             @foreach($divisions as $division)
                                 <option value="{{ $division->id }}"
-                                        @if($risk->divisions->first()->id === $division->id) selected @endif>
+                                        @if(optional($risk->divisions->first())->id === $division->id) selected @endif>
                                     {{ $division->name }}
                                 </option>
                                 @forelse($division->children as $child)
                                     {{-- TODO вложенность только одного уровня --}}
                                     <option value="{{ $child->id }}"
-                                            @if($risk->divisions->first()->id === $child->id) selected @endif>
+                                            @if(optional($risk->divisions->first())->id === $child->id) selected @endif>
                                         {{ str_repeat('-', $child->level) . ' ' . $child->name }}
                                     </option>
                                 @empty

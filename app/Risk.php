@@ -160,6 +160,14 @@ class Risk extends Model
             });
         });
 
+        $risksQuery->when($request->divisions, function ($query, $divisions) {
+           return $query->whereHas('divisions', function ($query) use ($divisions) {
+               /** TODO доделать с учётом иерархии */
+               return $query->whereIn('divisions.id', $divisions)
+                   ->orWhereIn('divisions.parent_id', $divisions);
+           });
+        });
+
         return $risksQuery;
     }
 }

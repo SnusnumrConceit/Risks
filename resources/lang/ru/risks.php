@@ -32,6 +32,6 @@ return [
         'created'    => 'Создан',
         'processing' => 'В работе',
         'finished'   => 'Завершён',
-        'expired'    => 'Истёк',
+        'expired'    => 'Просрочен',
     ],
 ];

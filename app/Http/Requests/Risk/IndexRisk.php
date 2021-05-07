@@ -26,8 +26,7 @@ class IndexRisk extends BaseIndexRequest
             'factors.*'   => 'required|exists:factors,id',
             'types'       => 'nullable|array|min:1',
             'types.*'     => 'required|exists:types,id',
-            'divisions'   => 'nullable|array|min:1',
-            'divisions.*' => 'required|exists:divisions,id',
+            'division'    => 'nullable|exists:divisions,id',
         ];
     }
 
@@ -49,7 +48,7 @@ class IndexRisk extends BaseIndexRequest
                 'impact'     => __('risks.impact'),
                 'factors'    => __('factors.factors'),
                 'types'      => __('types.types'),
-                'divisions'  => __('divisions.division'),
+                'division'   => __('divisions.division'),
             ]
         );
     }

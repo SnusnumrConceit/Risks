@@ -37,7 +37,8 @@
                               id="description"
                               cols="30"
                               rows="10"
-                              class="form-control">{{ old('description', $risk->description) }}</textarea>
+                              class="form-control @if($errors->has('description')) is-invalid @endif"
+                    >{{ old('description', $risk->description) }}</textarea>
                     @if($errors->has('description'))
                         <span class="invalid-feedback">
                             {{ $errors->first('description') }}
@@ -52,20 +53,24 @@
                     <input type="date"
                            name="expired_at"
                            value="{{ old('expired_at', $risk->expired_at->toDateString()) }}"
-                           class="form-control"
+                           class="form-control @if($errors->has('expired_at')) is-invalid @endif"
                            placeholder="{{ __('risks.expired_at') }}"
                     >
+                    @if($errors->has('expired_at'))
+                        <span class="invalid-feedback">
+                            {{ $errors->first('expired_at') }}
+                        </span>
+                    @endif
                 </div>
 
                 <div class="form-group">
                     <label for="likelihood">
                         {{ __('risks.likelihood') }}
                     </label>
-                    <select class="form-control"
+                    <select class="form-control @if($errors->has('likelihood')) is-invalid @endif"
                             name="likelihood"
                             id="likelihood"
                     >
-                        <option value="">{{ __('risks.likelihood') }}</option>
                         @for($likelihood = 1; $likelihood <= 5; $likelihood++)
                             <option value="{{ $likelihood }}"
                                     @if(intval($likelihood) === intval(old('likelihood', $risk->likelihood))) selected @endif
@@ -74,17 +79,21 @@
                             </option>
                         @endfor
                     </select>
+                    @if($errors->has('likelihood'))
+                        <span class="invalid-feedback">
+                            {{ $errors->first('likelihood') }}
+                        </span>
+                    @endif
                 </div>
 
                 <div class="form-group">
                     <label for="impact">
                         {{ __('risks.impact') }}
                     </label>
-                    <select class="form-control"
+                    <select class="form-control @if($errors->has('impact')) is-invalid @endif"
                             name="impact"
                             id="impact"
                     >
-                        <option value="">{{ __('risks.impact') }}</option>
                         @for($impact = 1; $impact <=5; $impact++)
                             <option value="{{ $impact }}"
                                     @if(intval($impact) === intval(old('impact', $risk->impact))) selected @endif
@@ -93,14 +102,21 @@
                             </option>
                         @endfor
                     </select>
+                    @if($errors->has('impact'))
+                        <span class="invalid-feedback">
+                            {{ $errors->first('impact') }}
+                        </span>
+                    @endif
                 </div>
 
                 <div class="form-group">
                     <label for="level">
                         {{ __('risks.level') }}
                     </label>
-                    <select name="level" id="level" class="form-control">
-                        <option value="">{{ __('risks.level') }}</option>
+                    <select name="level"
+                            id="level"
+                            class="form-control @if($errors->has('level')) is-invalid @endif"
+                    >
                         @foreach(\App\Risk::getLevels() as $level)
                             <option value="{{ $level }}"
                                     @if(old('level', $risk->level) === $level) selected @endif
@@ -109,6 +125,11 @@
                             </option>
                         @endforeach
                     </select>
+                    @if($errors->has('level'))
+                        <span class="invalid-feedback">
+                            {{ $errors->first('level') }}
+                        </span>
+                    @endif
                 </div>
 
                 <legend class="border-bottom">{{ __('types.types') }}</legend>
@@ -162,22 +183,27 @@
                 <legend class="border-bottom">{{ __('divisions.division') }}</legend>
                 <div class="form-group">
                     <div class="row col">
-                        <select name="divisions[]" id="" class="form-control">
+                        <select name="division_id" id="" class="form-control @if($errors->has('division_id')) is-invalid @endif">
                             @foreach($divisions as $division)
                                 <option value="{{ $division->id }}"
-                                        @if(optional($risk->divisions->first())->id === $division->id) selected @endif>
+                                        @if($risk->division_id === $division->id) selected @endif>
                                     {{ $division->name }}
                                 </option>
                                 @forelse($division->children as $child)
                                     {{-- TODO вложенность только одного уровня --}}
                                     <option value="{{ $child->id }}"
-                                            @if(optional($risk->divisions->first())->id === $child->id) selected @endif>
+                                            @if($risk->division_id === $child->id) selected @endif>
                                         {{ str_repeat('-', $child->level) . ' ' . $child->name }}
                                     </option>
                                 @empty
                                 @endforelse
                             @endforeach
                         </select>
+                        @if($errors->has('division_id'))
+                            <span class="invalid-feedback">
+                                {{ $errors->first('division_id') }}
+                            </span>
+                        @endif
                     </div>
                 </div>
 
@@ -185,8 +211,7 @@
                     <label for="status">
                         {{ __('risks.status') }}
                     </label>
-                    <select name="status" id="status" class="form-control">
-                        <option value="">{{ __('risks.status') }}</option>
+                    <select name="status" id="status" class="form-control @if($errors->has('status')) is-invalid @endif">
                         @foreach(\App\Risk::getStatuses() as $status)
                             <option value="{{ $status }}"
                                     @if(old('status', $risk->status) === $status) selected @endif
@@ -195,6 +220,11 @@
                             </option>
                         @endforeach
                     </select>
+                    @if($errors->has('status'))
+                        <span class="invalid-feedback">
+                            {{ $errors->first('status') }}
+                        </span>
+                    @endif
                 </div>
 
                 <div class="form-group">

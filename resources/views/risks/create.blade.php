@@ -37,7 +37,8 @@
                               id="description"
                               cols="30"
                               rows="10"
-                              class="form-control">{{ old('description') }}</textarea>
+                              class="form-control @if($errors->has('description')) is-invalid @endif"
+                    >{{ old('description') }}</textarea>
                     @if($errors->has('description'))
                         <span class="invalid-feedback">
                             {{ $errors->first('description') }}
@@ -52,35 +53,45 @@
                     <input type="date"
                            name="expired_at"
                            value="{{ old('expired_at', request('expired_at') ?? now()->addWeeks(2)->toDateString()) }}"
-                           class="form-control"
+                           class="form-control @if($errors->has('expired_at')) is-invalid @endif"
                            placeholder="{{ __('risks.expired_at') }}"
                     >
+                    @if($errors->has('expired_at'))
+                        <span class="invalid-feedback">
+                            {{ $errors->first('expired_at') }}
+                        </span>
+                    @endif
                 </div>
 
                 <div class="form-group">
                     <label for="likelihood">
                         {{ __('risks.likelihood') }}
                     </label>
-                        <select class="form-control"
-                                name="likelihood"
-                                id="likelihood"
-                        >
-                            <option value="">{{ __('risks.likelihood') }}</option>
-                            @for($likelihood = 1; $likelihood <= 5; $likelihood++)
-                                <option value="{{ $likelihood }}"
-                                        @if(intval($likelihood) === intval(old('likelihood'))) selected @endif
-                                >
-                                    {{ $likelihood }}
-                                </option>
-                            @endfor
-                        </select>
+                    <select class="form-control @if($errors->has('likelihood')) is-invalid @endif"
+                            name="likelihood"
+                            id="likelihood"
+                    >
+                        <option value="">{{ __('risks.likelihood') }}</option>
+                        @for($likelihood = 1; $likelihood <= 5; $likelihood++)
+                            <option value="{{ $likelihood }}"
+                                    @if(intval($likelihood) === intval(old('likelihood'))) selected @endif
+                            >
+                                {{ $likelihood }}
+                            </option>
+                        @endfor
+                    </select>
+                    @if($errors->has('likelihood'))
+                        <span class="invalid-feedback">
+                            {{ $errors->first('likelihood') }}
+                        </span>
+                    @endif
                 </div>
 
                 <div class="form-group">
                     <label for="impact">
                         {{ __('risks.impact') }}
                     </label>
-                    <select class="form-control"
+                    <select class="form-control @if($errors->has('impact')) is-invalid @endif"
                             name="impact"
                             id="impact"
                     >
@@ -93,13 +104,21 @@
                             </option>
                         @endfor
                     </select>
+                    @if($errors->has('impact'))
+                        <span class="invalid-feedback">
+                            {{ $errors->first('impact') }}
+                        </span>
+                    @endif
                 </div>
 
                 <div class="form-group">
                     <label for="level">
                         {{ __('risks.level') }}
                     </label>
-                    <select name="level" id="level" class="form-control">
+                    <select name="level"
+                            id="level"
+                            class="form-control @if($errors->has('level')) is-invalid @endif"
+                    >
                         <option value="">{{ __('risks.level') }}</option>
                         @foreach(\App\Risk::getLevels() as $level)
                             <option value="{{ $level }}"
@@ -109,6 +128,11 @@
                             </option>
                         @endforeach
                     </select>
+                    @if($errors->has('level'))
+                        <span class="invalid-feedback">
+                            {{ $errors->first('level') }}
+                        </span>
+                    @endif
                 </div>
 
                 <legend class="border-bottom">{{ __('types.types') }}</legend>
@@ -154,7 +178,10 @@
                 <legend class="border-bottom">{{ __('divisions.division') }}</legend>
                 <div class="form-group">
                     <div class="row col">
-                        <select name="divisions[]" id="" class="form-control">
+                        <select name="division_id"
+                                id="division_id"
+                                class="form-control @if($errors->has('division_id')) is-invalid @endif"
+                        >
                             @foreach($divisions as $division)
                                 <option value="{{ $division->id }}">{{ $division->name }}</option>
                                 @forelse($division->children as $child)
@@ -164,6 +191,11 @@
                                 @endforelse
                             @endforeach
                         </select>
+                        @if($errors->has('division_id'))
+                            <span class="invalid-feedback">
+                            {{ $errors->first('division_id') }}
+                        </span>
+                        @endif
                     </div>
                 </div>
 

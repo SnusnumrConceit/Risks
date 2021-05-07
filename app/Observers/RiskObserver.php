@@ -23,7 +23,6 @@ class RiskObserver
     {
         if (request()->filled('factors')) $risk->factors()->sync(request('factors'));
         if (request()->filled('types')) $risk->types()->sync(request('types'));
-        if (request()->filled('divisions')) $risk->divisions()->sync(request('divisions'));
     }
 
     /**
@@ -36,13 +35,11 @@ class RiskObserver
     {
         if (request()->filled('factors')) $risk->factors()->sync(request('factors'));
         if (request()->filled('types')) $risk->types()->sync(request('types'));
-        if (request()->filled('divisions')) $risk->divisions()->sync(request('divisions'));
     }
 
     public function deleting(Risk $risk)
     {
         $risk->factors()->detach();
         $risk->types()->detach();
-        $risk->divisions()->detach();
     }
 }

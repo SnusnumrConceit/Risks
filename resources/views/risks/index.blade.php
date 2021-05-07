@@ -173,8 +173,8 @@
                                         <label class="dropdown-item" for="division-{{ $division->id }}">
                                             <input type="checkbox"
                                                    value="{{ $division->id }}"
-                                                   name="divisions[]" id="division-{{ $division->id }}"
-                                                   @if(in_array($division->id, request('divisions', []))) checked @endif
+                                                   name="division" id="division-{{ $division->id }}"
+                                                   @if(intval($division->id) === intval(request('division', []))) checked @endif
                                             >
                                             {{ $division->name }}
                                         </label>
@@ -212,7 +212,7 @@
                                 {{ $risk->name }}
                             </a>
                         </td>
-                        <td>{{ optional($risk->divisions->first())->name ?? '' }}</td>
+                        <td>{{ optional($risk->division)->name ?? '' }}</td>
                         <td>{{ __('risks.levels.' . $risk->level) }}</td>
                         <td>{{ __('risks.statuses.'. $risk->status) }}</td>
                         <td>{{ $risk->likelihood }}</td>

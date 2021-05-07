@@ -34,8 +34,7 @@ class RiskPolicy
         if ( $user->hasPermission('risks_view') ) return true;
 
         return $user->hasPermission('risks_view_own')
-            && $user->divisions()->exists()
-            && $user->divisions()->whereIn('divisions.id', $risk->divisions()->pluck('id'))->exists();
+            && $user->division_id === $risk->division_id;
     }
 
     /**
@@ -61,8 +60,7 @@ class RiskPolicy
         if ( $user->hasPermission('risks_edit') ) return true;
 
         return $user->hasPermission('risks_edit_own')
-            && $user->divisions()->exists()
-            && $user->divisions()->whereIn('divisions.id', $risk->divisions()->pluck('id'))->exists();
+            && $user->division_id === $risk->division_id;
     }
 
     /**
@@ -77,7 +75,6 @@ class RiskPolicy
         if ( $user->hasPermission('risks_delete') ) return true;
 
         return $user->hasPermission('risks_delete_own')
-            && $user->divisions()->exists()
-            && $user->divisions()->whereIn('divisions.id', $risk->divisions()->pluck('id'))->exists();
+            && $user->division_id === $risk->division_id;
     }
 }

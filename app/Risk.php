@@ -80,13 +80,13 @@ class Risk extends Model
     }
 
     /**
-     * Подразделения рисков
+     * Подразделение
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function divisions()
+    public function division()
     {
-        return $this->belongsToMany(Division::class);
+        return $this->belongsTo(Division::class);
     }
 
     /**
@@ -160,11 +160,10 @@ class Risk extends Model
             });
         });
 
-        $risksQuery->when($request->divisions, function ($query, $divisions) {
-           return $query->whereHas('divisions', function ($query) use ($divisions) {
+        $risksQuery->when($request->division, function ($query, $division) {
+           return $query->whereHas('division', function ($query) use ($division) {
                /** TODO доделать с учётом иерархии */
-               return $query->whereIn('divisions.id', $divisions)
-                   ->orWhereIn('divisions.parent_id', $divisions);
+               return $query->where('divisions.id', $division);
            });
         });
 

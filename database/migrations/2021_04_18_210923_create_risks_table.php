@@ -30,9 +30,15 @@ class CreateRisksTable extends Migration
             $table->unsignedTinyInteger('impact')
                 ->index()
                 ->comment('влияние в баллах');
+            $table->unsignedInteger('division_id')->nullable();
             $table->timestamps();
 
             $table->index(['created_at']);
+
+            $table->foreign('division_id')
+                ->references('id')
+                ->on('divisions')
+                ->onDelete('SET NULL');
         });
 
        DB::statement('CREATE FULLTEXT INDEX risks_fulltext_search ON risks(name, description)');
@@ -48,6 +54,7 @@ class CreateRisksTable extends Migration
         DB::statement('ALTER TABLE risks DROP INDEX risks_fulltext_search');
 
         Schema::table('risks', function (Blueprint $table) {
+            $table->dropForeign(['division_id']);
             $table->dropIndex(['created_at']);
             $table->dropIndex(['expired_at']);
             $table->dropIndex(['likelihood']);

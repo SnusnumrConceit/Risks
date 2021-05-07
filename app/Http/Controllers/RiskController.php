@@ -29,7 +29,7 @@ class RiskController extends Controller
 
         $risksQuery = Risk::search($request);
 
-        $risks = $risksQuery->with('divisions')->paginate();
+        $risks = $risksQuery->with('division')->paginate();
 
         return view('risks.index', compact('risks'));
     }
@@ -54,7 +54,7 @@ class RiskController extends Controller
      */
     public function store(StoreRisk $request)
     {
-        $data = $request->except(['factors', 'types', 'divisions']);
+        $data = $request->except(['factors', 'types']);
         $risk = Risk::create($data);
 
         return redirect()->route('risks.show', ['risk' => $risk->uuid])
@@ -69,7 +69,7 @@ class RiskController extends Controller
      */
     public function show(Risk $risk)
     {
-        $risk->load(['factors', 'divisions', 'types']);
+        $risk->load(['factors', 'division', 'types']);
 
         return view('risks.show', compact('risk'));
     }
@@ -84,7 +84,7 @@ class RiskController extends Controller
     {
         $factors = Factor::orphans()->get();
         $divisions = Division::orphans()->get();
-        $risk->load(['factors', 'divisions', 'types']);
+        $risk->load(['factors', 'division', 'types']);
 
         return view('risks.edit', compact('risk', 'factors', 'divisions'));
     }

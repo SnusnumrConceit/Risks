@@ -102,6 +102,47 @@
                 </div>
 
                 <div class="form-group">
+                    <label for="division_id">
+                        {{ __('divisions.division') }}
+                    </label>
+                    <select name="division_id"
+                            id="division_id"
+                            class="form-control @if($errors->has('division_id')) is-invalid @endif"
+                    >
+                        @foreach($divisions as $division)
+                            <option value="{{ $division->id }}">{{ $division->name }}</option>
+                            @forelse($division->children as $child)
+                                {{-- TODO вложенность только одного уровня --}}
+                                <option value="{{ $child->id }}">{{ str_repeat('-', $child->level) . $child->name }}</option>
+                            @empty
+                            @endforelse
+                        @endforeach
+                    </select>
+                    @if($errors->has('division_id'))
+                        <span class="invalid-feedback">
+                        {{ $errors->first('division_id') }}
+                    </span>
+                    @endif
+                </div>
+
+                <div class="form-group">
+                    <label for="is_responsible">
+                        <input type="checkbox"
+                               name="is_responsible"
+                               id="is_responsible"
+                               value="1"
+                               @if(old('is_responsible')) checked @endif
+                        >
+                        {{ __('users.is_responsible') }}
+                    </label>
+                    @if($errors->has('is_responsible'))
+                        <span class="invalid-feedback">
+                            {{ $errors->first('is_responsible') }}
+                        </span>
+                    @endif
+                </div>
+
+                <div class="form-group">
                     <label for="role_uuid">
                         {{ __('roles.role') }}
                     </label>

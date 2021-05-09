@@ -24,6 +24,8 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->string('appointment', 50);
             $table->uuid('role_uuid')->nullable();
+            $table->unsignedInteger('division_id')->nullable();
+            $table->boolean('is_responsible')->default(0)->index();
 //            $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();
             $table->timestamps();
@@ -31,6 +33,11 @@ class CreateUsersTable extends Migration
             $table->foreign('role_uuid')
                 ->references('uuid')
                 ->on('roles')
+                ->onDelete('SET NULL');
+
+            $table->foreign('division_id')
+                ->references('id')
+                ->on('divisions')
                 ->onDelete('SET NULL');
         });
 
@@ -48,7 +55,9 @@ class CreateUsersTable extends Migration
 
         Schema::table('users', function (Blueprint $table) {
             $table->dropForeign(['role_uuid']);
+            $table->dropForeign(['division_id']);
             $table->dropIndex(['uuid']);
+            $table->dropIndex(['is_responsible']);
         });
 
         Schema::dropIfExists('users');

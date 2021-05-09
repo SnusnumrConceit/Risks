@@ -17,8 +17,12 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'email', 'password', 'appointment',
-        'uuid', 'role_uuid',
+        'uuid', 'role_uuid', 'division_id', 'is_responsible',
         'last_name', 'first_name', 'middle_name',
+    ];
+
+    protected $casts = [
+        'is_responsible' => 'boolean'
     ];
 
     /**
@@ -74,13 +78,13 @@ class User extends Authenticatable
     }
 
     /**
-     * Подраделения
+     * Подраделение
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function divisions()
+    public function division()
     {
-        return $this->belongsToMany(Division::class);
+        return $this->belongsTo(Division::class);
     }
 
     /**

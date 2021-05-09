@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\User;
 use App\Role;
+use App\Division;
 use App\Http\Requests\User\IndexUser;
 use App\Http\Requests\User\StoreUser;
 use App\Http\Requests\User\UpdateUser;
@@ -52,10 +53,10 @@ class UserController extends Controller
      */
     public function create()
     {
-        /** @var  $roles - TODO вынести в композер */
         $roles = Role::all();
+        $divisions = Division::orphans()->get();
 
-        return view('users.create', compact('roles'));
+        return view('users.create', compact('roles', 'divisions'));
     }
 
     /**
@@ -80,7 +81,7 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        $user->load('role');
+        $user->load('role', 'division');
 
         return view('users.show', compact('user'));
     }
@@ -93,11 +94,11 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        /** @var  $roles - TODO вынести в композер */
         $roles = Role::all();
-        $user->load('role');
+        $divisions = Division::orphans()->get();
+        $user->load('role', 'division');
 
-        return view('users.edit', compact('roles', 'user'));
+        return view('users.edit', compact('roles', 'divisions', 'user'));
     }
 
     /**

@@ -53,6 +53,7 @@
                         <th scope="col">{{ __('users.full_name') }}</th>
                         <th scope="col">{{ __('users.email') }}</th>
                         <th scope="col">{{ __('users.appointment') }}</th>
+                        <th scope="col">{{ __('divisions.division') }}</th>
                         <th scope="col">{{ __('roles.role') }}</th>
                         <th scope="col">{{ __('users.created_at') }}</th>
                         <th scope="col">{{ __('users.updated_at') }}</th>
@@ -69,6 +70,7 @@
                         </td>
                         <td>{{ $user->email }}</td>
                         <td>{{ $user->appointment }}</td>
+                        <td>{{ optional($user->division)->name }}</td>
                         <td>{{ optional($user->role)->name }}</td>
                         <td>{{ $user->created_at->format('d.m.Y H:i:s') }}</td>
                         <td>{{ $user->updated_at->format('d.m.Y H:i:s') }}</td>

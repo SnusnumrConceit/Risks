@@ -32,6 +32,17 @@
                 <legend>{{ __('roles.role') }}</legend>
                 <span>{{ optional($user->role)->name }}</span>
             </div>
+            <div class="form-group col-lg-6">
+                <legend>{{ __('divisions.division') }}</legend>
+                <span>{{ optional($user->division)->name }}</span>
+                <span>
+                     @if($user->is_responsible)
+                        <strong class="text-success">+</strong>
+                    @else
+                        <strong class="text-danger">-</strong>
+                    @endif
+                </span>
+            </div>
         </div>
         <div class="form-group row ml-3">
             @include('common.actions', ['entityName' => 'user', 'entity' => $user])

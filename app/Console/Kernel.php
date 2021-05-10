@@ -3,6 +3,7 @@
 namespace App\Console;
 
 use App\Risk;
+use App\Events\RiskExpired;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -29,6 +30,14 @@ class Kernel extends ConsoleKernel
             Risk::expired()->update([
                 'status' => Risk::STATUS_EXPIRED
             ]);
+        })->daily();
+
+        $schedule->call(function () {
+            for ($beforeDays = 0; $beforeDays <= 3; $beforeDays++) {
+                if ($beforeDays === 2) continue;
+
+                event(RiskExpired::class, $beforeDays);
+            }
         })->daily();
         // $schedule->command('inspire')->hourly();
     }

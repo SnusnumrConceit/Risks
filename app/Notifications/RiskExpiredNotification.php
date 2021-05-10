@@ -5,10 +5,10 @@ namespace App\Notifications;
 use App\Risk;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Messages\MailMessage;
 
-class RiskExpiredNotification extends Notification
+class RiskExpiredNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 

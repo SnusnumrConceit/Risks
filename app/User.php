@@ -220,4 +220,15 @@ class User extends Authenticatable
             ->orWhere('appointment', 'LIKE', $keyword . '%')
             ->orWhereRaw("MATCH(last_name,first_name,middle_name) AGAINST('+{$escapedKeyword}' IN BOOLEAN MODE)");
     }
+
+    /**
+     * Выражение, чтобы получить ответственных за подразделения
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder $query
+     */
+    public static function scopeResponsible($query)
+    {
+        return $query->where('is_responsible', true);
+    }
 }

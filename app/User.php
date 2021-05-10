@@ -88,6 +88,16 @@ class User extends Authenticatable
     }
 
     /**
+     * Риски
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function risks()
+    {
+        return $this->hasMany(Risk::class, 'division_id', 'division_id');
+    }
+
+    /**
      * ФИО
      *
      * @return string

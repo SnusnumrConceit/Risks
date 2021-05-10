@@ -21,4 +21,30 @@ class Division extends MaterializedPath
     {
         return 'uuid';
     }
+
+    /**
+     * Выборка потомков по id и уровню родителя
+     *
+     * @param Illuminate\Database\Query\Builder $query
+     * @param int $id
+     * @param int $level
+     * @return Illuminate\Database\Query\Builder
+     */
+    public static function scopeDescendants($query, int $id, int $level = 0)
+    {
+        return Division::where('path', 'LIKE', "%{$id}/%")
+            ->where('level', '>=', $level);
+    }
+
+    /**
+     * Получить id потомков по id и уровню родителя
+     *
+     * @param int $id
+     * @param int $level
+     * @return array
+     */
+    public static function getDescendantsIds(int $id, int $level = 0)
+    {
+        return static::descendants($id, $level)->pluck('id')->all();
+    }
 }

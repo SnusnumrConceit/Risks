@@ -40,6 +40,8 @@ class StoreRisk extends FormRequest
         return [
             'name'        => 'required|between:5,255',
             'description' => 'required|max:2000',
+            'summa'       => 'nullable|between:0,99999999.00',
+            'damage'      => 'nullable|between:0,99999999.00',
             'level'       => 'required|in:' . implode(',', Risk::getLevels()),
             'likelihood'  => 'required|integer|between:1,5',
             'impact'      => 'required|integer|between:1,5',
@@ -62,6 +64,8 @@ class StoreRisk extends FormRequest
         return [
             'name'        => __('risks.name'),
             'description' => __('risks.description'),
+            'summa'       => __('risks.summa'),
+            'damage'      => __('risks.damage'),
             'level'       => __('risks.level'),
             'status'      => __('risks.status'),
             'likelihood'  => __('risks.likelihood'),

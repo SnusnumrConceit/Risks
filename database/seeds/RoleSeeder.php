@@ -26,6 +26,7 @@ class RoleSeeder extends Seeder
             Permission::whereIn('name', [
                 'risks_view_own', 'risks_edit_own', 'risks_delete_own', 'risks_create',
                 'divisions_view_own', 'divisions_edit_own', 'divisions_delete_own',
+                'users_view_own', 'users_edit_own', 'users_delete_own'
             ])->pluck('id')
         );
     }

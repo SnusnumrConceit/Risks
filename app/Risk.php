@@ -90,6 +90,26 @@ class Risk extends Model
     }
 
     /**
+     * Установка суммы
+     *
+     * @param $value
+     */
+    public function setSummaAttribute($value)
+    {
+        $this->attributes['summa'] = is_null($value) ? 0 : $value;
+    }
+
+    /**
+     * Установка ущерба
+     *
+     * @param $value
+     */
+    public function setDamageAttribute($value)
+    {
+        $this->attributes['damage'] = is_null($value) ? 0 : $value;
+    }
+
+    /**
      * Просроченные риски
      *
      * @param $q
@@ -162,7 +182,6 @@ class Risk extends Model
 
         $risksQuery->when($request->division, function ($query, $division) {
            return $query->whereHas('division', function ($query) use ($division) {
-               /** TODO доделать с учётом иерархии */
                return $query->where('divisions.id', $division);
            });
         });

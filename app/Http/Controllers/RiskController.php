@@ -11,9 +11,18 @@ use App\Http\Requests\Risk\UpdateRisk;
 
 class RiskController extends Controller
 {
+    private $user;
+
     public function __construct()
     {
-        $this->authorizeResource(Risk::class);
+        $this->middleware('auth');
+
+        $this->middleware(function($request, $next) {
+            $this->user = auth()->user();
+            $this->authorizeResource(Risk::class);
+
+            return $next($request);
+        });
     }
 
     /**
@@ -29,9 +38,23 @@ class RiskController extends Controller
 
         $risksQuery = Risk::search($request);
 
-        $risks = $risksQuery->with('division')->paginate();
+        $risks = $risksQuery->whereHas('division', function ($query) {
+            if ($this->user->hasPermission('risks_view')) return $query;
 
-        return view('risks.index', compact('risks'));
+            return $query->whereIn('id', Division::getDescendantsIds($this->user->division_id, $this->user->division->level));
+        })->paginate();
+
+        if ($this->user->hasPermission('risks_view')) {
+            $divisions = Division::all()->groupBy('parent_id');
+        } else if ($this->user->is_responsible) {
+            $divisions = Division::descendants($this->user->division_id, $this->user->division->level)
+                ->get()
+                ->groupBy('parent_id');
+        } else {
+            $divisions = $this->user->division;
+        }
+
+        return view('risks.index', compact('risks', 'divisions'));
     }
 
     /**
@@ -42,7 +65,17 @@ class RiskController extends Controller
     public function create()
     {
         $factors = Factor::orphans()->get();
-        $divisions = Division::orphans()->get();
+
+        if ($this->user->hasPermission('risks_view')) {
+            $divisions = Division::all()->groupBy('parent_id');
+        } else if ($this->user->is_responsible) {
+            $divisions = Division::descendants($this->user->division_id, $this->user->division->level)
+                ->get()
+                ->groupBy('parent_id');
+        } else {
+            $divisions = $this->user->division;
+        }
+
         return view('risks.create', compact('factors', 'divisions'));
     }
 
@@ -83,7 +116,17 @@ class RiskController extends Controller
     public function edit(Risk $risk)
     {
         $factors = Factor::orphans()->get();
-        $divisions = Division::orphans()->get();
+
+        if ($this->user->hasPermission('risks_view')) {
+            $divisions = Division::all()->groupBy('parent_id');
+        } else if ($this->user->is_responsible) {
+            $divisions = Division::descendants($this->user->division_id, $this->user->division->level)
+                ->get()
+                ->groupBy('parent_id');
+        } else {
+            $divisions = $this->user->division;
+        }
+
         $risk->load(['factors', 'division', 'types']);
 
         return view('risks.edit', compact('risk', 'factors', 'divisions'));

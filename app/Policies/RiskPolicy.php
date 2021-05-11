@@ -4,6 +4,7 @@ namespace App\Policies;
 
 use App\Risk;
 use App\User;
+use App\Division;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class RiskPolicy
@@ -34,7 +35,7 @@ class RiskPolicy
         if ( $user->hasPermission('risks_view') ) return true;
 
         return $user->hasPermission('risks_view_own')
-            && $user->division_id === $risk->division_id;
+            && $this->canRiskPersonalAccess($user, $risk);
     }
 
     /**
@@ -60,7 +61,7 @@ class RiskPolicy
         if ( $user->hasPermission('risks_edit') ) return true;
 
         return $user->hasPermission('risks_edit_own')
-            && $user->division_id === $risk->division_id;
+            && $this->canRiskPersonalAccess($user, $risk);
     }
 
     /**
@@ -75,6 +76,22 @@ class RiskPolicy
         if ( $user->hasPermission('risks_delete') ) return true;
 
         return $user->hasPermission('risks_delete_own')
-            && $user->division_id === $risk->division_id;
+            && $this->canRiskPersonalAccess($user, $risk);
+    }
+
+    /**
+     * Проверка, имеется ли у пользователя персональный доступ к риску
+     *
+     * @param \App\User $user
+     * @param \App\Risk $risk
+     * @return bool
+     */
+    private function canRiskPersonalAccess(User $user, Risk $risk)
+    {
+        return $user->division_id === $risk->division_id
+            || (
+                $user->is_responsible
+                && in_array($risk->division_id, Division::getDescendantsIds($user->division_id, $user->division->level))
+            );
     }
 }

@@ -41,6 +41,13 @@ class DivisionController extends Controller
             return $query->where('name', 'LIKE', $keyword . '%');
         });
 
+        if (! $this->user->hasPermission('divisions_view')) {
+            $divisionsQuery->whereIn(
+                'id',
+                Division::getDescendantsIds($this->user->division_id, $this->user->division->level)
+            );
+        }
+
         $divisions = $divisionsQuery->paginate();
 
         return view('divisions.index', compact('divisions'));

@@ -2,8 +2,8 @@
 
 namespace App\Policies;
 
-use App\Division;
 use App\User;
+use App\Division;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class DivisionPolicy
@@ -34,7 +34,7 @@ class DivisionPolicy
         if ( $user->hasPermission('divisions_view') ) return true;
 
         return $user->hasPermission('divisions_view_own')
-            && $user->divisions()->where('id', $division->id)->exists();
+            && $this->canRiskPersonalAccess($user, $division);
     }
 
     /**
@@ -60,7 +60,7 @@ class DivisionPolicy
         if ( $user->hasPermission('divisions_edit') ) return true;
 
         return $user->hasPermission('divisions_edit_own')
-            && $user->divisions()->where(['id' => $division->id, 'is_responsible' => true])->exists();
+            && $this->canRiskPersonalAccess($user, $division);
     }
 
     /**
@@ -75,6 +75,22 @@ class DivisionPolicy
         if ( $user->hasPermission('divisions_delete') ) return true;
 
         return $user->hasPermission('divisions_delete_own')
-            && $user->divisions()->where(['id' => $division->id, 'is_responsible' => true])->exists();
+            && $this->canRiskPersonalAccess($user, $division);
+    }
+
+    /**
+     * Проверка, имеется ли у пользователя персональный доступ к подразделению
+     *
+     * @param \App\User $user
+     * @param \App\Division $division
+     * @return bool
+     */
+    private function canRiskPersonalAccess(User $user, Division $division)
+    {
+        return $user->division_id === $division->id
+            || (
+                $user->is_responsible
+                && in_array($division->id, Division::getDescendantsIds($user->division_id, $user->division->level))
+            );
     }
 }

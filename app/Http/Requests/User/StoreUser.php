@@ -54,7 +54,7 @@ class StoreUser extends FormRequest
             'email'          => __('users.email'),
             'password'       => __('users.password'),
             'role_uuid'      => __('roles.role'),
-            'divisions_id'   => __('divisions.division'),
+            'division_id'    => __('divisions.division'),
             'is_responsible' => __('users.is_responsible'),
         ];
     }

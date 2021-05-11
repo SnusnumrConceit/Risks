@@ -175,29 +175,19 @@
                     @endforeach
                 </div>
 
-                <legend class="border-bottom">{{ __('divisions.division') }}</legend>
-                <div class="form-group">
-                    <div class="row col">
-                        <select name="division_id"
-                                id="division_id"
-                                class="form-control @if($errors->has('division_id')) is-invalid @endif"
-                        >
-                            @foreach($divisions as $division)
-                                <option value="{{ $division->id }}">{{ $division->name }}</option>
-                                @forelse($division->children as $child)
-                                    {{-- TODO вложенность только одного уровня --}}
-                                    <option value="{{ $child->id }}">{{ str_repeat('-', $child->level) . $child->name }}</option>
-                                    @empty
-                                @endforelse
-                            @endforeach
-                        </select>
-                        @if($errors->has('division_id'))
-                            <span class="invalid-feedback">
-                            {{ $errors->first('division_id') }}
-                        </span>
-                        @endif
+                @if(auth()->user()->is_responsible || auth()->user()->hasPermission('divisions_view'))
+                    <legend class="border-bottom">{{ __('divisions.division') }}</legend>
+                    <div class="form-group">
+                        <div class="row col">
+                            @include('risks.divisions_selector', ['divisions' => $divisions, 'name' => 'division_id'])
+                            @if($errors->has('division_id'))
+                                <span class="invalid-feedback">
+                                    {{ $errors->first('division_id') }}
+                                </span>
+                            @endif
+                        </div>
                     </div>
-                </div>
+                @endif
 
                 <div class="form-group">
                     <button class="btn btn-outline-success" type="submit">

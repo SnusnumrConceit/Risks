@@ -105,19 +105,10 @@
                     <label for="division_id">
                         {{ __('divisions.division') }}
                     </label>
-                    <select name="division_id"
-                            id="division_id"
-                            class="form-control @if($errors->has('division_id')) is-invalid @endif"
-                    >
-                        @foreach($divisions as $division)
-                            <option value="{{ $division->id }}">{{ $division->name }}</option>
-                            @forelse($division->children as $child)
-                                {{-- TODO вложенность только одного уровня --}}
-                                <option value="{{ $child->id }}">{{ str_repeat('-', $child->level) . $child->name }}</option>
-                            @empty
-                            @endforelse
-                        @endforeach
-                    </select>
+                    @include('risks.divisions_selector', [
+                        'divisions' => $availableDivisions,
+                        'name'      => 'division_id'
+                    ])
                     @if($errors->has('division_id'))
                         <span class="invalid-feedback">
                         {{ $errors->first('division_id') }}

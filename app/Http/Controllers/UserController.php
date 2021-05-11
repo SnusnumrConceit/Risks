@@ -54,9 +54,9 @@ class UserController extends Controller
     public function create()
     {
         $roles = Role::all();
-        $divisions = Division::orphans()->get();
+        $availableDivisions = Division::all()->groupBy('parent_id');
 
-        return view('users.create', compact('roles', 'divisions'));
+        return view('users.create', compact('roles', 'availableDivisions'));
     }
 
     /**
@@ -95,10 +95,10 @@ class UserController extends Controller
     public function edit(User $user)
     {
         $roles = Role::all();
-        $divisions = Division::orphans()->get();
+        $availableDivisions = Division::all()->groupBy('parent_id');
         $user->load('role', 'division');
 
-        return view('users.edit', compact('roles', 'divisions', 'user'));
+        return view('users.edit', compact('roles', 'availableDivisions', 'user'));
     }
 
     /**

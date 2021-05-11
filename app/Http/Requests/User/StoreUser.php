@@ -3,9 +3,12 @@
 namespace App\Http\Requests\User;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Http\Requests\Risk\ShouldVerifyDivision;
 
 class StoreUser extends FormRequest
 {
+    use ShouldVerifyDivision;
+
     /**
      * Наличие доступа
      *
@@ -31,7 +34,7 @@ class StoreUser extends FormRequest
             'email'          => 'required|email|unique:users,email',
             'password'       => 'required|between:8,50|confirmed',
             'role_uuid'      => 'required|exists:roles,uuid',
-            'division_id'    => 'required|exists:divisions,id',
+            'division_id'    => 'required|exists:divisions,id|accessable',
             'is_responsible' => 'nullable|boolean'
         ];
     }

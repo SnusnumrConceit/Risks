@@ -32,7 +32,7 @@ class DestroyDivision extends FormRequest
     public function rules()
     {
         return [
-            'id' => 'required|exists:divisions,id|unique:divisions,parent_id|unique:division_risk,division_id'
+            'id' => 'required|exists:divisions,id|unique:risks,division_id'
         ];
     }
 

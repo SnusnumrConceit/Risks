@@ -3,15 +3,9 @@
         {{ __('divisions.division') }}
     </option>
     @if(! isset($required))
-        <option value=""></option>
+        <option value="">-</option>
     @endif
     @foreach($divisions as $division)
-        <option value="{{ $division->id }}"
-                @if(( isset($selected) ? $selected : intval(request($name)) ) === $division->id) selected @endif>
-            {{ $division->name }}
-        </option>
-        @foreach($division->children as $child)
-            @include('risks.divisions_hierarchy', ['division' => $child, 'name' => $name])
-        @endforeach
+        @include('risks.divisions_hierarchy', array_merge(compact('division', 'name'), ['excepted' => isset($excepted) ? $excepted : '']))
     @endforeach
 </select>

@@ -1,4 +1,4 @@
-<nav class="bg-white col-md-2 d-md-block d-none sidebar border-top shadow-sm">
+<nav class="bg-white col-md-auto d-md-block d-none sidebar border-top shadow-sm">
     <div class="sidebar-sticky">
         <ul class="nav flex-column">
             @can('viewAny', \App\Risk::class)

@@ -7,6 +7,10 @@ use App\Http\Requests\BaseIndexRequest;
 
 class IndexRisk extends BaseIndexRequest
 {
+    use ShouldVerifyDivision;
+
+    private $user;
+
     /**
      * Правила валидации
      *
@@ -26,7 +30,7 @@ class IndexRisk extends BaseIndexRequest
             'factors.*'   => 'required|exists:factors,id',
             'types'       => 'nullable|array|min:1',
             'types.*'     => 'required|exists:types,id',
-            'division'    => 'nullable|exists:divisions,id',
+            'division'    => 'nullable|exists:divisions,id|accessable',
         ];
     }
 

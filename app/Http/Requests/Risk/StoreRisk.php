@@ -7,6 +7,10 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class StoreRisk extends FormRequest
 {
+    use ShouldVerifyDivision;
+
+    private $user;
+
     /**
      * Наличие доступа
      *
@@ -17,6 +21,15 @@ class StoreRisk extends FormRequest
         return true;
     }
 
+    protected function prepareForValidation()
+    {
+        $this->user = auth()->user();
+
+        if (! $this->user->is_responsible && ! $this->user->hasPermission('divisions_view')) {
+            return $this->merge(['division_id' => $this->user->division_id]);
+        }
+    }
+
     /**
      * Правила валидации
      *
@@ -25,7 +38,7 @@ class StoreRisk extends FormRequest
     public function rules()
     {
         return [
-            'name'        => 'required|max:5,255',
+            'name'        => 'required|between:5,255',
             'description' => 'required|max:2000',
             'level'       => 'required|in:' . implode(',', Risk::getLevels()),
             'likelihood'  => 'required|integer|between:1,5',
@@ -35,7 +48,7 @@ class StoreRisk extends FormRequest
             'factors.*'   => 'required|exists:factors,id',
             'types'       => 'required|array|min:1',
             'types.*'     => 'required|exists:types,id',
-            'division_id' => 'required|exists:divisions,id',
+            'division_id' => 'required|exists:divisions,id|accessable',
         ];
     }
 

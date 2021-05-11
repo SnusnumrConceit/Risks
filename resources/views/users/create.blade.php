@@ -107,7 +107,8 @@
                     </label>
                     @include('risks.divisions_selector', [
                         'divisions' => $availableDivisions,
-                        'name'      => 'division_id'
+                        'name'      => 'division_id',
+                        'required'  => true,
                     ])
                     @if($errors->has('division_id'))
                         <span class="invalid-feedback">

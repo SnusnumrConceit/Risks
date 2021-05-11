@@ -11,9 +11,18 @@ use App\Http\Requests\User\UpdateUser;
 
 class UserController extends Controller
 {
+    private $user;
+
     public function __construct()
     {
-        $this->authorizeResource(User::class);
+        $this->middleware('auth');
+
+        $this->middleware(function ($request, $next) {
+            $this->user = auth()->user();
+            $this->authorizeResource(User::class);
+
+            return $next($request);
+        });
     }
 
     /**
@@ -54,7 +63,12 @@ class UserController extends Controller
     public function create()
     {
         $roles = Role::all();
-        $availableDivisions = Division::all()->groupBy('parent_id');
+
+        if ($this->user->hasPermission('divisions_view')) {
+            $availableDivisions = Division::orphans()->get();
+        } else {
+            $availableDivisions = $this->user->division;
+        }
 
         return view('users.create', compact('roles', 'availableDivisions'));
     }
@@ -94,9 +108,14 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        $roles = Role::all();
-        $availableDivisions = Division::all()->groupBy('parent_id');
         $user->load('role', 'division');
+        $roles = Role::all();
+
+        if ($this->user->hasPermission('divisions_view')) {
+            $availableDivisions = Division::orphans()->get();
+        } else {
+            $availableDivisions = $this->user->division;
+        }
 
         return view('users.edit', compact('roles', 'availableDivisions', 'user'));
     }

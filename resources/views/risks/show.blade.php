@@ -5,6 +5,13 @@
         <div class="card-title border-bottom">
             <div class="h2">
                 @include('common.back', ['title' => $risk->name])
+                <div class="badge badge-secondary">
+                    <span>{{ __('risks.levels.' . $risk->level) }}</span>
+                </div>
+
+                <div class="badge badge-secondary float-right">
+                    <span>{{ __('risks.statuses.' . $risk->status) }}</span>
+                </div>
             </div>
         </div>
         <div class="card-body row">
@@ -31,12 +38,12 @@
         </div>
         <div class="card-body row">
             <div class="form-group col-lg-3">
-                <legend>{{ __('risks.level') }}</legend>
-                <span>{{ __('risks.levels.' . $risk->level) }}</span>
+                <legend>{{ __('risks.summa') }}</legend>
+                <span>{{ $risk->summa }}</span>
             </div>
             <div class="form-group col-lg-3">
-                <legend>{{ __('risks.status') }}</legend>
-                <span>{{ __('risks.statuses.' . $risk->status) }}</span>
+                <legend>{{ __('risks.damage') }}</legend>
+                <span>{{ $risk->damage }}</span>
             </div>
             <div class="form-group col-lg-3">
                 <legend>{{ __('risks.likelihood') }}</legend>

@@ -1,13 +1,17 @@
 <select name="{{ $name }}" id="{{ $name }}" class="form-control">
     <option value="" disabled @empty(request($name)) selected @endempty>
-        {{ __('divisions.divisions') }}
+        {{ __('divisions.division') }}
     </option>
-    @foreach($divisions as $key => $divisionGroup)
-        @foreach($divisionGroup as $division)
-            @include('risks.divisions_hierarchy', compact('divisions', 'key', 'division', 'name'))
+    @if(! isset($required))
+        <option value=""></option>
+    @endif
+    @foreach($divisions as $division)
+        <option value="{{ $division->id }}"
+                @if(( isset($selected) ? $selected : intval(request($name)) ) === $division->id) selected @endif>
+            {{ $division->name }}
+        </option>
+        @foreach($division->children as $child)
+            @include('risks.divisions_hierarchy', ['division' => $child, 'name' => $name])
         @endforeach
-        @if(! $key)
-            <option value="" disabled>{{ __('divisions.children') }}</option>
-        @endif
     @endforeach
 </select>

@@ -6,6 +6,7 @@ use App\Factor;
 use App\Http\Requests\Factor\IndexFactor;
 use App\Http\Requests\Factor\StoreFactor;
 use App\Http\Requests\Factor\UpdateFactor;
+use App\Http\Requests\Factor\DestroyFactor;
 
 class FactorController extends Controller
 {
@@ -118,7 +119,7 @@ class FactorController extends Controller
      * @return \Illuminate\Http\Response
      * @throws \Exception
      */
-    public function destroy(Factor $factor)
+    public function destroy(DestroyFactor $request, Factor $factor)
     {
         $factor->delete();
 

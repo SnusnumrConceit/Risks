@@ -36,7 +36,8 @@
                     @include('risks.divisions_selector', [
                         'divisions' => $availableDivisions,
                         'name'      => 'parent_id',
-                        'selected'  => $division->parent_id
+                        'selected'  => $division->parent_id,
+                        'excepted'  => $division->id
                     ])
                     @if($errors->has('parent_id'))
                         <span class="invalid-feedback">

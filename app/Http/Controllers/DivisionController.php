@@ -10,9 +10,18 @@ use App\Http\Requests\Division\DestroyDivision;
 
 class DivisionController extends Controller
 {
+    private $user;
+
     public function __construct()
     {
-        $this->authorizeResource(Division::class);
+        $this->middleware('auth');
+
+        $this->middleware(function ($request, $next) {
+            $this->user = auth()->user();
+            $this->authorizeResource(Division::class);
+
+            return $next($request);
+        });
     }
 
     /**
@@ -44,7 +53,11 @@ class DivisionController extends Controller
      */
     public function create()
     {
-        $availableDivisions = \App\Division::all()->groupBy('parent_id');
+        if ($this->user->hasPermission('divisions_view')) {
+            $availableDivisions = Division::orphans()->get();
+        } else {
+            $availableDivisions = $this->user->division;
+        }
 
         return view('divisions.create', compact('availableDivisions'));
     }
@@ -85,10 +98,12 @@ class DivisionController extends Controller
     public function edit(Division $division)
     {
         $division->load('parent');
-        $availableDivisions = Division::where('level', '<=', $division->level)
-            ->where('id', '<>', $division->id)
-            ->get()
-            ->groupBy('parent_id');
+
+        if ($this->user->hasPermission('divisions_view')) {
+            $availableDivisions = Division::orphans()->get();
+        } else {
+            $availableDivisions = $this->user->division;
+        }
 
         return view('divisions.edit', compact('division', 'availableDivisions'));
     }

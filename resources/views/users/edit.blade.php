@@ -137,7 +137,7 @@
                                name="is_responsible"
                                id="is_responsible"
                                value="1"
-                               @if($user->is_rsponsible) checked @endif>
+                               @if($user->is_responsible) checked @endif>
                         {{ __('users.is_responsible') }}
                     </label>
                     @if($errors->has('is_responsible'))

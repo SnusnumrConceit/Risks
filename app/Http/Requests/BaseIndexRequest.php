@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\ValidationException;
 
 class BaseIndexRequest extends FormRequest
 {
@@ -42,5 +43,18 @@ class BaseIndexRequest extends FormRequest
         return [
             'keyword' => __('ui.keyword')
         ];
+    }
+
+    /**
+     * Сброс поиска путём редиректа на страницу без GET-параметров
+     *
+     * @param \Illuminate\Contracts\Validation\Validator $validator
+     * @throws ValidationException
+     */
+    protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
+    {
+        throw (new ValidationException($validator))
+            ->errorBag($this->errorBag)
+            ->redirectTo($this->url());
     }
 }

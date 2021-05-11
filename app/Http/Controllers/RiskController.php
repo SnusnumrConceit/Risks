@@ -45,11 +45,7 @@ class RiskController extends Controller
         })->paginate();
 
         if ($this->user->hasPermission('risks_view')) {
-            $divisions = Division::all()->groupBy('parent_id');
-        } else if ($this->user->is_responsible) {
-            $divisions = Division::descendants($this->user->division_id, $this->user->division->level)
-                ->get()
-                ->groupBy('parent_id');
+            $divisions = Division::orphans()->get();
         } else {
             $divisions = $this->user->division;
         }
@@ -67,11 +63,7 @@ class RiskController extends Controller
         $factors = Factor::orphans()->get();
 
         if ($this->user->hasPermission('risks_view')) {
-            $divisions = Division::all()->groupBy('parent_id');
-        } else if ($this->user->is_responsible) {
-            $divisions = Division::descendants($this->user->division_id, $this->user->division->level)
-                ->get()
-                ->groupBy('parent_id');
+            $divisions = Division::orphans()->get();
         } else {
             $divisions = $this->user->division;
         }
@@ -118,11 +110,7 @@ class RiskController extends Controller
         $factors = Factor::orphans()->get();
 
         if ($this->user->hasPermission('risks_view')) {
-            $divisions = Division::all()->groupBy('parent_id');
-        } else if ($this->user->is_responsible) {
-            $divisions = Division::descendants($this->user->division_id, $this->user->division->level)
-                ->get()
-                ->groupBy('parent_id');
+            $divisions = Division::orphans()->get();
         } else {
             $divisions = $this->user->division;
         }

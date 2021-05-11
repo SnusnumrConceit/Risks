@@ -24,7 +24,7 @@ class RoleSeeder extends Seeder
 
         $user->permissions()->sync(
             Permission::whereIn('name', [
-                'risks_view_own', 'risks_edit_own', 'risks_delete_own'
+                'risks_view_own', 'risks_edit_own', 'risks_delete_own', 'risks_create'
             ])->pluck('id')
         );
     }

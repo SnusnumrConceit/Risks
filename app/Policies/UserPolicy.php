@@ -3,6 +3,7 @@
 namespace App\Policies;
 
 use App\User;
+use App\Division;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class UserPolicy
@@ -17,7 +18,8 @@ class UserPolicy
      */
     public function viewAny(User $user)
     {
-        return $user->hasPermission('users_view');
+        return $user->hasPermission('users_view')
+            || $user->hasPermission('users_view_own');
     }
 
     /**
@@ -29,7 +31,14 @@ class UserPolicy
      */
     public function view(User $user, User $model)
     {
-        return $user->hasPermission('users_view');
+        if ($user->hasPermission('full')) return true;
+
+        if ($user->id === $model->id) return false;
+
+        if ( $user->hasPermission('users_view') ) return true;
+
+        return $user->hasPermission('users_view_own')
+            && $this->canRiskPersonalAccess($user, $model);
     }
 
     /**
@@ -52,7 +61,14 @@ class UserPolicy
      */
     public function update(User $user, User $model)
     {
-        return $user->hasPermission('users_edit');
+        if ($user->hasPermission('full')) return true;
+
+        if ($user->id === $model->id) return false;
+
+        if ( $user->hasPermission('users_edit') ) return true;
+
+        return $user->hasPermission('users_edit_own')
+            && $this->canRiskPersonalAccess($user, $model);
     }
 
     /**
@@ -64,6 +80,27 @@ class UserPolicy
      */
     public function delete(User $user, User $model)
     {
-        return $user->hasPermission('users_delete');
+        if ($user->id === $model->id) return false;
+
+        if ( $user->hasPermission('users_delete') ) return true;
+
+        return $user->hasPermission('users_delete_own')
+            && $this->canRiskPersonalAccess($user, $model);
+    }
+
+    /**
+     * Проверка, имеется ли у пользователя персональный доступ к подразделению
+     *
+     * @param \App\User $user
+     * @param \App\User $model
+     * @return bool
+     */
+    private function canRiskPersonalAccess(User $user, User $model)
+    {
+        return $user->division_id === $model->id
+            || (
+                $user->is_responsible
+                && in_array($model->division_id, Division::getDescendantsIds($user->division_id, $user->division->level))
+            );
     }
 }

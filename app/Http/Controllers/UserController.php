@@ -48,7 +48,20 @@ class UserController extends Controller
            });
         });
 
-        $users = $usersQuery->with('role')->paginate();
+        $canPersonalUsersAccess = ! $this->user->hasPermission('users_view');
+
+        $usersQuery->when($canPersonalUsersAccess, function ($query) {
+           return $query->whereNotNull('division_id')->where('id', '<>', $this->user->id);
+        });
+
+        $users = $usersQuery->with(['role', 'division' => function ($query) use ($canPersonalUsersAccess) {
+            if (! $canPersonalUsersAccess) return $query;
+
+            return $query->whereIn(
+                'id',
+                Division::getDescendantsIds($this->user->division_id, $this->user->division->level)
+            );
+        }])->paginate();
         /** @var  $roles - TODO вынести в композер */
         $roles = Role::all();
 

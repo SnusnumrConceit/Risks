@@ -56,7 +56,7 @@ class DivisionController extends Controller
         if ($this->user->hasPermission('divisions_view')) {
             $availableDivisions = Division::orphans()->get();
         } else {
-            $availableDivisions = $this->user->division;
+            $availableDivisions = collect()->push($this->user->division);
         }
 
         return view('divisions.create', compact('availableDivisions'));
@@ -102,7 +102,7 @@ class DivisionController extends Controller
         if ($this->user->hasPermission('divisions_view')) {
             $availableDivisions = Division::orphans()->get();
         } else {
-            $availableDivisions = $this->user->division;
+            $availableDivisions = collect()->push($this->user->division);
         }
 
         return view('divisions.edit', compact('division', 'availableDivisions'));

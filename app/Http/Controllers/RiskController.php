@@ -47,7 +47,7 @@ class RiskController extends Controller
         if ($this->user->hasPermission('risks_view')) {
             $divisions = Division::orphans()->get();
         } else {
-            $divisions = $this->user->division;
+            $divisions = collect()->push($this->user->division);
         }
 
         return view('risks.index', compact('risks', 'divisions'));
@@ -65,7 +65,7 @@ class RiskController extends Controller
         if ($this->user->hasPermission('risks_view')) {
             $divisions = Division::orphans()->get();
         } else {
-            $divisions = $this->user->division;
+            $divisions = collect()->push($this->user->division);
         }
 
         return view('risks.create', compact('factors', 'divisions'));
@@ -112,7 +112,7 @@ class RiskController extends Controller
         if ($this->user->hasPermission('risks_view')) {
             $divisions = Division::orphans()->get();
         } else {
-            $divisions = $this->user->division;
+            $divisions = collect()->push($this->user->division);
         }
 
         $risk->load(['factors', 'division', 'types']);

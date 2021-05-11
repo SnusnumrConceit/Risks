@@ -5,11 +5,11 @@
         <div class="card-title border-bottom">
             <div class="h2">
                 @include('common.back', ['title' => $risk->name])
-                <div class="badge badge-secondary">
+                <div class="badge badge-{{ $levelClasses[$risk->level] }}">
                     <span>{{ __('risks.levels.' . $risk->level) }}</span>
                 </div>
 
-                <div class="badge badge-secondary float-right">
+                <div class="badge badge-{{ $statusClasses[$risk->status] }} float-right">
                     <span>{{ __('risks.statuses.' . $risk->status) }}</span>
                 </div>
             </div>

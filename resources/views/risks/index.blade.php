@@ -199,14 +199,22 @@
                         <td>{{ optional($risk->division)->name ?? '' }}</td>
                         <td>{{ $risk->summa }}</td>
                         <td>{{ $risk->damage }}</td>
-                        <td>{{ __('risks.levels.' . $risk->level) }}</td>
-                        <td>{{ __('risks.statuses.'. $risk->status) }}</td>
+                        <td>
+                            <span class="badge badge-{{ $levelClasses[$risk->level] }} p-2">
+                                {{ __('risks.levels.' . $risk->level) }}
+                            </span>
+                        </td>
+                        <td>
+                            <span class="badge badge-{{ $statusClasses[$risk->status] }} p-2">
+                                {{ __('risks.statuses.'. $risk->status) }}
+                            </span>
+                        </td>
                         <td>{{ $risk->likelihood }}</td>
                         <td>{{ $risk->impact }}</td>
                         <td>{{ $risk->created_at->format('d.m.Y') }}</td>
                         <td>{{ $risk->expired_at->format('d.m.Y') }}</td>
                         <td>
-                            <div class="row col justify-content-end">
+                            <div class="d-flex justify-content-start">
                                 @include('common.actions', ['entityName' => 'risk', 'entity' => $risk])
                             </div>
                         </td>

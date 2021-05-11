@@ -3,9 +3,12 @@
 namespace App\Http\Requests\Division;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Http\Requests\Risk\ShouldVerifyDivision;
 
 class StoreDivision extends FormRequest
 {
+    use ShouldVerifyDivision;
+
     /**
      * Наличие доступа
      *
@@ -25,7 +28,7 @@ class StoreDivision extends FormRequest
     {
         return [
             'name'      => 'required|between:5,30|unique:divisions,name',
-            'parent_id' => 'nullable|exists:divisions,id',
+            'parent_id' => 'nullable|exists:divisions,id|accessable',
         ];
     }
 

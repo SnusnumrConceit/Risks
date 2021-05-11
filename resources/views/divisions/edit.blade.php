@@ -33,19 +33,11 @@
                     <label for="parent_id">
                         {{ __('divisions.parent_id') }}
                     </label>
-                    <select name="parent_id"
-                            id="parent_id"
-                            class="form-control @if($errors->has('parent_id')) is-invalid @endif"
-                    >
-                        <option value=""></option>
-                        @foreach($availableDivisions as $availableDivision)
-                            <option value="{{ $availableDivision->id }}"
-                                    @if(intval(old('parent_id', $division->parent_id)) === intval($availableDivision->id)) selected @endif
-                            >
-                            @if($availableDivision->level) {{ str_repeat('-', $availableDivision->level) }} @endif {{ $availableDivision->name }}
-                            </option>
-                        @endforeach
-                    </select>
+                    @include('risks.divisions_selector', [
+                        'divisions' => $availableDivisions,
+                        'name'      => 'parent_id',
+                        'selected'  => $division->parent_id
+                    ])
                     @if($errors->has('parent_id'))
                         <span class="invalid-feedback">
                             {{ $errors->first('parent_id') }}

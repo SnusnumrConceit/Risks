@@ -21,7 +21,9 @@ class UpdateDivision extends StoreDivision
             ],
             'parent_id' => [
                 'nullable',
-                'not_in:' . $this->division->id
+                'not_in:' . $this->division->id,
+                'exists:divisions,id',
+                'accessable'
             ]
         ];
     }

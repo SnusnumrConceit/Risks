@@ -44,7 +44,9 @@ class DivisionController extends Controller
      */
     public function create()
     {
-        return view('divisions.create');
+        $availableDivisions = \App\Division::all()->groupBy('parent_id');
+
+        return view('divisions.create', compact('availableDivisions'));
     }
 
     /**
@@ -85,7 +87,8 @@ class DivisionController extends Controller
         $division->load('parent');
         $availableDivisions = Division::where('level', '<=', $division->level)
             ->where('id', '<>', $division->id)
-            ->get();
+            ->get()
+            ->groupBy('parent_id');
 
         return view('divisions.edit', compact('division', 'availableDivisions'));
     }

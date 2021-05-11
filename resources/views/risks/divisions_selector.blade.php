@@ -2,7 +2,7 @@
     <option value="" disabled @empty(request($name)) selected @endempty>
         {{ __('divisions.division') }}
     </option>
-    @if(! isset($required))
+    @if(! isset($required) && auth()->user()->hasPermission('divisions_view'))
         <option value="">-</option>
     @endif
     @foreach($divisions as $division)

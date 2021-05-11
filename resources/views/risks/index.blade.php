@@ -161,7 +161,7 @@
                         @if(auth()->user()->is_responsible || auth()->user()->hasPermission('divisions_view'))
                             @include('risks.divisions_selector', [
                                 'divisions' => $divisions,
-                                'name' => 'division_id',
+                                'name'      => 'division',
                             ])
                         @endif
                     </div>

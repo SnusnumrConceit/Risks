@@ -169,11 +169,13 @@
 
     <div class="card mt-4">
         <div class="card-body">
-            <table class="table table-hover">
+            <table class="table table-hover table-responsive">
                 <thead class="thead-light">
                     <tr>
                         <th scope="col">{{ __('risks.name') }}</th>
                         <th scope="col">{{ __('divisions.division') }}</th>
+                        <th scope="col">{{ __('risks.summa') }}</th>
+                        <th scope="col">{{ __('risks.damage') }}</th>
                         <th scope="col">{{ __('risks.level') }}</th>
                         <th scope="col">{{ __('risks.status') }}</th>
                         <th scope="col">{{ __('risks.likelihood') }}</th>
@@ -192,6 +194,8 @@
                             </a>
                         </td>
                         <td>{{ optional($risk->division)->name ?? '' }}</td>
+                        <td>{{ $risk->summa }}</td>
+                        <td>{{ $risk->damage }}</td>
                         <td>{{ __('risks.levels.' . $risk->level) }}</td>
                         <td>{{ __('risks.statuses.'. $risk->status) }}</td>
                         <td>{{ $risk->likelihood }}</td>

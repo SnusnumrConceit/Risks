@@ -9,8 +9,6 @@ class StoreRisk extends FormRequest
 {
     use ShouldVerifyDivision;
 
-    private $user;
-
     /**
      * Наличие доступа
      *
@@ -23,10 +21,10 @@ class StoreRisk extends FormRequest
 
     protected function prepareForValidation()
     {
-        $this->user = auth()->user();
+        $this->authUser = auth()->user();
 
-        if (! $this->user->is_responsible && ! $this->user->hasPermission('divisions_view')) {
-            return $this->merge(['division_id' => $this->user->division_id]);
+        if (! $this->authUser->is_responsible && ! $this->authUser->hasPermission('divisions_view')) {
+            return $this->merge(['division_id' => $this->authUser->division_id]);
         }
     }
 

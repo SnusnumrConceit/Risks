@@ -159,7 +159,10 @@
 
                     <div class="col-lg-3 ml-2">
                         @if(auth()->user()->is_responsible || auth()->user()->hasPermission('divisions_view'))
-                            @include('risks.divisions_selector', ['divisions' => $divisions, 'name' => 'division_id'])
+                            @include('risks.divisions_selector', [
+                                'divisions' => $divisions,
+                                'name' => 'division_id',
+                            ])
                         @endif
                     </div>
                 </div>

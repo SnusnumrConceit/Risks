@@ -213,7 +213,11 @@
                     <legend class="border-bottom">{{ __('divisions.division') }}</legend>
                     <div class="form-group">
                         <div class="row col">
-                            @include('risks.divisions_selector', ['divisions' => $divisions, 'name' => 'division_id'])
+                            @include('risks.divisions_selector', [
+                                'divisions' => $divisions,
+                                'name' => 'division_id',
+                                'required' => true
+                            ])
                             @if($errors->has('division_id'))
                                 <span class="invalid-feedback">
                                     {{ $errors->first('division_id') }}

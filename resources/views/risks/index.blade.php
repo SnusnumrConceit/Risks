@@ -158,30 +158,9 @@
                     </div>
 
                     <div class="col-lg-3 ml-2">
-                        <div class="dropdown">
-                            <button class="btn btn-outline-dark dropdown-toggle"
-                                    type="button"
-                                    id="factors-filter"
-                                    data-toggle="dropdown"
-                                    aria-haspopup="true"
-                                    aria-expanded="false">
-                                {{ __('divisions.divisions') }}
-                            </button>
-                            <ul class="dropdown-menu" aria-labelledby="divisions-filter">
-                                @foreach(\App\Division::orderBy('name')->orphans()->get() as $key => $division)
-                                    <li>
-                                        <label class="dropdown-item" for="division-{{ $division->id }}">
-                                            <input type="checkbox"
-                                                   value="{{ $division->id }}"
-                                                   name="division" id="division-{{ $division->id }}"
-                                                   @if(intval($division->id) === intval(request('division', []))) checked @endif
-                                            >
-                                            {{ $division->name }}
-                                        </label>
-                                    </li>
-                                @endforeach
-                            </ul>
-                        </div>
+                        @if(auth()->user()->is_responsible || auth()->user()->hasPermission('divisions_view'))
+                            @include('risks.divisions_selector', ['divisions' => $divisions, 'name' => 'division_id'])
+                        @endif
                     </div>
                 </div>
             </div>

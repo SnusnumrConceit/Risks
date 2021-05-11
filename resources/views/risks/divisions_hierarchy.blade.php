@@ -3,4 +3,4 @@
 @elseif($loop->first && ! $key)
     <option value="" disabled>{{ __('divisions.main') }}</option>
 @endif
-<option value="{{ $division->id }}" @if(intval(request('division')) === $division->id) selected @endif>{{ $division->name }}</option>
+<option value="{{ $division->id }}" @if(intval(request($name)) === $division->id) selected @endif>{{ $division->name }}</option>

@@ -11,6 +11,7 @@ return [
     'middle_name'   => 'Отчество',
     'full_name'     => 'ФИО',
     'appointment'   => 'Должность',
+    'responsible'   => 'Отвественный подразделения',
     'is_responsible' => 'Является ответственным',
     'password'      => 'Пароль',
     'password_confirmation' => 'Подтвердите пароль',

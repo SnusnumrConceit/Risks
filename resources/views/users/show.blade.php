@@ -35,13 +35,10 @@
             <div class="form-group col-lg-6">
                 <legend>{{ __('divisions.division') }}</legend>
                 <span>{{ optional($user->division)->name }}</span>
-                <span>
-                     @if($user->is_responsible)
-                        <strong class="text-success">+</strong>
-                    @else
-                        <strong class="text-danger">-</strong>
-                    @endif
-                </span>
+            </div>
+            <div class="form-group col-lg-6">
+                <legend>{{ __('users.responsible') }}</legend>
+                <span>{{ $user->is_responsible ? 'Да' : 'Нет' }}</span>
             </div>
         </div>
         <div class="form-group row ml-3">

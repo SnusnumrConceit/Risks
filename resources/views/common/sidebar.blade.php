@@ -1,6 +1,11 @@
 <nav class="bg-white col-md-auto d-md-block d-none sidebar border-top shadow-sm">
     <div class="sidebar-sticky">
         <ul class="nav flex-column">
+            <li class="nav-item py-2">
+                <a class="nav-link @if(request()->is('metrics*')) bg-info text-white @endif" href="{{ route('metrics.index') }}">
+                    {{ __('metrics.metrics') }}
+                </a>
+            </li>
             @can('viewAny', \App\Risk::class)
                 <li class="nav-item py-2">
                     <a class="nav-link @if(request()->is('risks*')) bg-info text-white @endif" href="{{ route('risks.index') }}">

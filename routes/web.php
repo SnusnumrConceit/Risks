@@ -13,13 +13,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return redirect()->action([\App\Http\Controllers\RiskController::class, 'index']);
-});
+Route::get('/', 'HomeController@index')->name('home');
 
 Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');
 
 Route::group(['middleware' => 'auth'], function () {
     Route::resource('factors', FactorController::class);
@@ -28,4 +24,5 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('roles', RoleController::class);
     Route::resource('types', TypeController::class);
     Route::resource('users', UserController::class);
+    Route::get('/metrics', 'MetricController@index')->name('metrics.index');
 });

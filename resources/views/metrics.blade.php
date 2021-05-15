@@ -32,7 +32,7 @@
                                     :data="[{{ implode(',', $divisions = array_values($risks_divisions_metric)) }}]"
                                     :colors="[
                                 @foreach($divisions as $division)
-                                        'rgb({{ rand(0, 255) }}, {{ rand(0, 255) }}, {{ rand(0, 255) }})',
+                                        '{{ generate_color() }}',
                                 @endforeach
                                         ]"
                                 />
@@ -48,20 +48,20 @@
                                     :data="[{{ implode(',', $types = array_values($risks_types_metric)) }}]"
                                     :colors="[
                                 @foreach($types as $type)
-                                        'rgb({{ rand(0, 255) }}, {{ rand(0, 255) }}, {{ rand(0, 255) }})',
+                                        '{{ generate_color() }}',
                                 @endforeach
                                         ]"
                                 />
                             </div>
                             {{-- Суммарная метрика по факторам рисков --}}
                             <div class="col-md-6">
-                                <risks-types-metric
+                                <risks-factors-metric
                                     :headers="['{{ implode("', '", array_keys($risks_factors_metric)) }}']"
                                     label="{{ __('factors.factors') }}"
                                     :data="[{{ implode(',', $factors = array_values($risks_factors_metric)) }}]"
                                     :colors="[
                                 @foreach($factors as $factor)
-                                        'rgb({{ rand(0, 255) }}, {{ rand(0, 255) }}, {{ rand(0, 255) }})',
+                                        '{{ generate_color() }}',
                                 @endforeach
                                         ]"
                                 />

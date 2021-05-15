@@ -2,9 +2,11 @@
 
 namespace App\Providers;
 
-use App\ViewComposers\RiskViewComposer;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
+
+use App\ViewComposers\RiskViewComposer;
+use App\ViewComposers\RiskMetricColorViewComposer;
 
 class ComposerServiceProvider extends ServiceProvider
 {
@@ -29,6 +31,10 @@ class ComposerServiceProvider extends ServiceProvider
             RiskViewComposer::class => [
                 'risks.index',
                 'risks.show',
+            ],
+
+            RiskMetricColorViewComposer::class => [
+                'metrics'
             ]
         ]);
     }

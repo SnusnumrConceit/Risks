@@ -35,7 +35,7 @@ class MetricController extends Controller
             return $this->riskMetricService->getTypesMetric($risks);
         });
 
-        $risksFactorsMetric = Cache::remember('risks_types_metric', 300, function() use ($risks) {
+        $risksFactorsMetric = Cache::remember('risks_factors_metric', 300, function() use ($risks) {
             return $this->riskMetricService->getFactorsMetric($risks);
         });
 

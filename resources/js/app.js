@@ -20,6 +20,14 @@ window.Vue = require('vue');
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+Vue.component('pie', require('./components/charts/Base/Pie').default);
+
+Vue.component('users-amount-metric', require('./components/charts/UsersAmountMetric').default);
+Vue.component('risks-amount-metric', require('./components/charts/RisksAmountMetric').default);
+Vue.component('risks-factors-metric', require('./components/charts/RisksFactorsMetric').default);
+Vue.component('risks-types-metric', require('./components/charts/RisksTypesMetric').default);
+Vue.component('risks-statuses-metric', require('./components/charts/RisksStatusesMetric').default);
+Vue.component('risks-divisions-metric', require('./components/charts/RisksDivisionsMetric').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

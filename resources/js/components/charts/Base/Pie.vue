@@ -6,7 +6,6 @@
         name: "pie",
         props: ['labels', 'datasets', 'options'],
         mounted() {
-            console.log({labels: this.labels, datasets: this.datasets});
             this.renderChart(
                 {
                   labels: this.labels,

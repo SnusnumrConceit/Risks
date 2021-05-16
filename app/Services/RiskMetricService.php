@@ -9,6 +9,14 @@ use App\Factor;
 
 class RiskMetricService
 {
+    const METRIC_PREFIX          = '_metric';
+    const RESPONSIBLE_PREFIX     = '_responsible';
+    const USERS_AMOUNT_METRIC    = 'users_amount'    . self::METRIC_PREFIX;
+    const RISKS_TYPES_METRIC     = 'risks_types'     . self::METRIC_PREFIX;
+    const RISKS_FACTORS_METRIC   = 'risks_factors'   . self::METRIC_PREFIX;
+    const RISKS_STATUSES_METRIC  = 'risks_statuses'  . self::METRIC_PREFIX;
+    const RISKS_DIVISIONS_METRIC = 'risks_divisions' . self::METRIC_PREFIX;
+
     /**
      * Метрика рисков по видам
      *
@@ -82,11 +90,44 @@ class RiskMetricService
      */
     public function getMainDivisionsMetric($risks) : array
     {
-        return $risks->where('division.level', '<=', 1)
-            ->groupBy('division_id')
+        return $this->getDivisionsMetric($risks->where('division.level', '<=', 1));
+    }
+
+    /**
+     * Метрика рисков по подразделениям
+     *
+     * @param $risks
+     * @return array
+     */
+    public function getDivisionsMetric($risks) : array
+    {
+        return $risks->groupBy('division_id')
             ->mapWithKeys(function ($risks) {
                 return [ $risks->first()->division->name => $risks->count() ];
             })
             ->all();
+    }
+
+    /**
+     * Получить сформированный ключ метрики
+     * Состав $extra:
+     * - is_responsible
+     * - division_id
+     *
+     * @param string $key
+     * @param array $extra
+     * @return string
+     */
+    public function getMetricCacheKey(string $key, array $extra = []) : string
+    {
+        if (empty($extra)) return $key;
+
+        $key = str_replace(self::METRIC_PREFIX, '', $key);
+
+        if (array_key_exists('is_responsible', $extra)) {
+            $key .= self::RESPONSIBLE_PREFIX;
+        }
+
+        return $key . '_' . $extra['division_id'] . self::METRIC_PREFIX;
     }
 }

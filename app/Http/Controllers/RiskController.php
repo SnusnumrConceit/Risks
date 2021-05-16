@@ -133,6 +133,9 @@ class RiskController extends Controller
 
         $risk->update($data);
 
+        if (request()->filled('factors')) $risk->factors()->sync(request('factors'));
+        if (request()->filled('types')) $risk->types()->sync(request('types'));
+
         return redirect()->route('risks.show', ['risk' => $risk->uuid])
             ->withSuccess(__('risks.updated'));
     }

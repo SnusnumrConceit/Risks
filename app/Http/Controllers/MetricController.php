@@ -5,11 +5,12 @@ namespace App\Http\Controllers;
 use Cache;
 use App\Risk;
 use App\User;
+use App\Division;
 use App\Services\RiskMetricService;
 
 class MetricController extends Controller
 {
-    private $riskMetricService;
+    private $riskMetricService, $user, $canViewAllRisks;
 
     /**
      * Create a new controller instance.
@@ -21,39 +22,87 @@ class MetricController extends Controller
     {
         $this->middleware('auth');
         $this->riskMetricService = $riskMetricService;
+
+        $this->middleware(function($request, $next) {
+            $this->user = auth()->user();
+            $this->canViewAllRisks = $this->user->hasPermission('risks_view');
+
+            return $next($request);
+        });
     }
 
     public function index()
     {
-        $usersAmount = Cache::remember('users_amount', 300, function () {
-            return User::count();
-        });
+        if ($this->canViewAllRisks) {
+            $usersAmount = Cache::remember(RiskMetricService::USERS_AMOUNT_METRIC, 300, function () {
+                return User::count();
+            });
+        }
 
-        $risks = Risk::with(['division', 'factors', 'types'])->get();
+        $risks = Risk::with(['division', 'factors', 'types']);
 
-        $risksTypesMetric = Cache::remember('risks_types_metric', 300, function() use ($risks) {
-            return $this->riskMetricService->getTypesMetric($risks);
-        });
+        if (! $this->canViewAllRisks) {
+            if ($this->user->is_responsible) {
+                $risks = $risks->whereIn(
+                    'division_id',
+                    Division::getDescendantsIds($this->user->division_id, $this->user->division->level)
+                );
+            } else {
+                $risks = $risks->where('division_id', $this->user->division_id);
+            }
+        }
 
-        $risksFactorsMetric = Cache::remember('risks_factors_metric', 300, function() use ($risks) {
-            return $this->riskMetricService->getFactorsMetric($risks);
-        });
+        $risks = $risks->get();
 
-        $risksStatusesMetric = Cache::remember('risks_statuses_metric', 300, function () use ($risks) {
-            return $this->riskMetricService->getStatusesMetric($risks);
-        });
+        if ($this->canViewAllRisks) {
+            $extra = [];
+        } else {
+            $extra = ['division_id' => $this->user->division_id];
 
-        $riskMainDivisionsMetric = Cache::remember('risks_main_divisions_metric', 300, function () use ($risks) {
-            return $this->riskMetricService->getMainDivisionsMetric($risks);
-        });
+            if ($this->user->is_responsible) $extra['is_responsible'] = $this->user->is_responsible;
+        }
+
+        $risksTypesMetric = Cache::remember(
+            $this->riskMetricService->getMetricCacheKey(RiskMetricService::RISKS_TYPES_METRIC, $extra),
+            300,
+            function() use ($risks) {
+                return $this->riskMetricService->getTypesMetric($risks);
+            }
+        );
+
+        $risksFactorsMetric = Cache::remember(
+            $this->riskMetricService->getMetricCacheKey(RiskMetricService::RISKS_FACTORS_METRIC, $extra),
+            300,
+            function() use ($risks) {
+                return $this->riskMetricService->getFactorsMetric($risks);
+            }
+        );
+
+        $risksStatusesMetric = Cache::remember(
+            $this->riskMetricService->getMetricCacheKey(RiskMetricService::RISKS_STATUSES_METRIC, $extra),
+            300,
+            function () use ($risks) {
+                return $this->riskMetricService->getStatusesMetric($risks);
+            }
+        );
+
+        $risksDivisionsMetric = Cache::remember(
+            $this->riskMetricService->getMetricCacheKey(RiskMetricService::RISKS_DIVISIONS_METRIC, $extra),
+            300,
+            function () use ($risks) {
+                return (! $this->canViewAllRisks)
+                    ? $this->riskMetricService->getDivisionsMetric($risks)
+                    : $this->riskMetricService->getMainDivisionsMetric($risks);
+            }
+        );
 
         return view('metrics', [
-            'users_amount'           => $usersAmount,
+            'users_amount'           => $usersAmount ?? [],
             'risks_amount'           => $risks->count(),
             'risks_types_metric'     => $risksTypesMetric,
             'risks_factors_metric'   => $risksFactorsMetric,
             'risks_statuses_metric'  => $risksStatusesMetric,
-            'risks_divisions_metric' => $riskMainDivisionsMetric
+            'risks_divisions_metric' => $risksDivisionsMetric
         ]);
     }
 }

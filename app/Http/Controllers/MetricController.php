@@ -12,6 +12,8 @@ class MetricController extends Controller
 {
     private $riskMetricService, $user, $canViewAllRisks;
 
+    const CACHE_DEFAULT = 30;
+
     /**
      * Create a new controller instance.
      *
@@ -34,7 +36,7 @@ class MetricController extends Controller
     public function index()
     {
         if ($this->canViewAllRisks) {
-            $usersAmount = Cache::remember(RiskMetricService::USERS_AMOUNT_METRIC, 300, function () {
+            $usersAmount = Cache::remember(RiskMetricService::USERS_AMOUNT_METRIC, self::CACHE_DEFAULT, function () {
                 return User::count();
             });
         }
@@ -64,7 +66,7 @@ class MetricController extends Controller
 
         $risksTypesMetric = Cache::remember(
             $this->riskMetricService->getMetricCacheKey(RiskMetricService::RISKS_TYPES_METRIC, $extra),
-            300,
+            self::CACHE_DEFAULT,
             function() use ($risks) {
                 return $this->riskMetricService->getTypesMetric($risks);
             }
@@ -72,7 +74,7 @@ class MetricController extends Controller
 
         $risksFactorsMetric = Cache::remember(
             $this->riskMetricService->getMetricCacheKey(RiskMetricService::RISKS_FACTORS_METRIC, $extra),
-            300,
+            self::CACHE_DEFAULT,
             function() use ($risks) {
                 return $this->riskMetricService->getFactorsMetric($risks);
             }
@@ -80,7 +82,7 @@ class MetricController extends Controller
 
         $risksStatusesMetric = Cache::remember(
             $this->riskMetricService->getMetricCacheKey(RiskMetricService::RISKS_STATUSES_METRIC, $extra),
-            300,
+            self::CACHE_DEFAULT,
             function () use ($risks) {
                 return $this->riskMetricService->getStatusesMetric($risks);
             }
@@ -88,7 +90,7 @@ class MetricController extends Controller
 
         $risksDivisionsMetric = Cache::remember(
             $this->riskMetricService->getMetricCacheKey(RiskMetricService::RISKS_DIVISIONS_METRIC, $extra),
-            300,
+            self::CACHE_DEFAULT,
             function () use ($risks) {
                 return (! $this->canViewAllRisks)
                     ? $this->riskMetricService->getDivisionsMetric($risks)

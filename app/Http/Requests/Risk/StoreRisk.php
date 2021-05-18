@@ -74,4 +74,16 @@ class StoreRisk extends FormRequest
             'division_id' => __('divisions.division'),
         ];
     }
+
+    /**
+     * Валидационные сообщения
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            'expired_at.after' => __('validation.after', ['date' => now()->format('d.m.Y')])
+        ];
+    }
 }

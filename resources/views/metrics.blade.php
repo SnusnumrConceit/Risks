@@ -85,20 +85,22 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <h2>{{ __('users.users') }}</h2>
-                        <div class="row my-4">
-                            {{-- Суммарная метрика по пользователям --}}
-                            <div class="col-md-6">
-                                <users-amount-metric
-                                    :headers="['{{ __('users.users') }}']"
-                                    label="{{ __('users.users') }}"
-                                    :data="[{{ $users_amount }}]"
-                                    :colors="['rgb(255, 99, 132)']" {{-- красный --}}
-                                />
+                    @if(auth()->user()->hasPermission('users_view'))
+                        <div class="form-group">
+                            <h2>{{ __('users.users') }}</h2>
+                            <div class="row my-4">
+                                {{-- Суммарная метрика по пользователям --}}
+                                <div class="col-md-6">
+                                    <users-amount-metric
+                                        :headers="['{{ __('users.users') }}']"
+                                        label="{{ __('users.users') }}"
+                                        :data="[{{ $users_amount }}]"
+                                        :colors="['rgb(255, 99, 132)']" {{-- красный --}}
+                                    />
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    @endif
                 </div>
             </div>
         </div>

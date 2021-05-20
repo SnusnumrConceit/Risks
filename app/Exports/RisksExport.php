@@ -4,6 +4,7 @@ namespace App\Exports;
 
 use App\Risk;
 use Carbon\Carbon;
+use Illuminate\Support\Str;
 use Maatwebsite\Excel\Excel;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\WithStyles;
@@ -100,27 +101,43 @@ class RisksExport implements FromCollection, Responsable, WithHeadings, WithMapp
     }
 
     /**
-     * Подготовка данных к табличному представлению
+     * Получить сформированные данные к табличному представлению
      *
      * @param \App\Risk $risk
      * @return array
      */
     public function map($risk): array
     {
-        return [
-            $risk->name,
-            optional($risk->division)->name,
-            $risk->summa,
-            $risk->damage,
-            __('risks.levels.' . $risk->level),
-            $risk->likelihood,
-            $risk->impact,
-            __('risks.statuses.' . $risk->status),
-            $this->getMappedTypes($risk->types),
-            $this->getMappedFactors($risk->factors),
-            $this->getMappedDate($risk->created_at),
-            $this->getMappedDate($risk->expired_at),
-        ];
+        $records = $risk->only(array_merge(['name', 'division'], $this->filters->cols));
+        $records['division'] = optional($records['division'])->name;
+
+        foreach ($records as $attribute => $record) {
+            if (in_array($attribute, ['level', 'status'])) {
+                $records[$attribute] = __(implode('.', ['risks', Str::plural($attribute), $record]));
+
+                continue;
+            }
+
+            if ($attribute === 'factors') {
+                $records[$attribute] = $this->getMappedFactors($record);
+
+                continue;
+            }
+
+            if ($attribute === 'types') {
+                $records[$attribute] = $this->getMappedTypes($record);
+
+                continue;
+            }
+
+            if (in_array($attribute, ['created_at', 'expired_at'])) {
+                $records[$attribute] = $this->getMappedDate($record);
+
+                continue;
+            }
+        }
+
+        return $records;
     }
 
     /**

@@ -16,10 +16,28 @@
                     </legend>
                     <div class="form-group row">
                         <div class="col-6">
-                            <input type="date" class="form-control" name="from" value="{{ old('from', request('from')) }}">
+                            <input type="date"
+                                   class="form-control @if($errors->has('from')) is-invalid @endif"
+                                   name="from"
+                                   value="{{ old('from', request('from')) }}"
+                            >
+                            @if($errors->has('from'))
+                                <span class="invalid-feedback">
+                                    {{ $errors->first('from') }}
+                                </span>
+                            @endif
                         </div>
                         <div class="col-6">
-                            <input type="date" class="form-control" name="to" value="{{ old('to', request('to')) }}">
+                            <input type="date"
+                                   class="form-control @if($errors->has('to')) is-invalid @endif"
+                                   name="to"
+                                   value="{{ old('to', request('to')) }}"
+                            >
+                            @if($errors->has('to'))
+                                <span class="invalid-feedback">
+                                    {{ $errors->first('to') }}
+                                </span>
+                            @endif
                         </div>
                     </div>
                     <legend class="border-bottom">
@@ -29,7 +47,12 @@
                         @foreach(config('report.cols') as $col)
                             <div class="col-3">
                                 <label for="{{ $col }}">
-                                    <input type="checkbox" id="{{ $col }}" name="cols[]" value="{{ $col }}" checked>
+                                    <input type="checkbox"
+                                           id="{{ $col }}"
+                                           name="cols[]"
+                                           value="{{ $col }}"
+                                           @if(empty($cols = old('cols', [])) || in_array($col, $cols)) checked @endif
+                                    >
                                     {{ __('risks.' . $col) }}
                                 </label>
                             </div>

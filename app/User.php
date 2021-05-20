@@ -98,6 +98,24 @@ class User extends Authenticatable
     }
 
     /**
+     * Получить подразделения
+     *
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function getDivisions()
+    {
+        if ($this->hasPermission('risks_view')) {
+            $divisions = Division::all();
+        } else if ($this->is_responsible) {
+            $divisions = Division::descendants($this->division_id, $this->division->level)->get();
+        } else {
+            $divisions = collect()->push($this->division);
+        }
+
+        return $divisions;
+    }
+
+    /**
      * ФИО
      *
      * @return string

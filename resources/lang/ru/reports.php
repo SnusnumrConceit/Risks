@@ -2,6 +2,7 @@
 
 return [
     'reports' => 'Отчёты',
+    'extension' => 'Расширение',
 
     'choose' => [
         'date_range' => 'Выберите временной диапазон',

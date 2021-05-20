@@ -59,7 +59,17 @@
                         @endforeach
                     </div>
                     <div class="form-group row">
-                        <div class="col-12">
+                        <div class="col-2">
+                            <select name="extension" id="extension" class="form-control">
+                                @foreach($extensions as $value => $extension)
+                                    <option value="{{ $value }}"
+                                            @if($extension === \Maatwebsite\Excel\Excel::XLSX) selected @endif>
+                                        {{ $extension }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-10">
                             <button type="submit" class="btn btn-outline-success">
                                 {{ __('ui.export') }}
                             </button>

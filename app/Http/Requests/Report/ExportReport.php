@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Report;
 
+use Maatwebsite\Excel\Excel;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ExportReport extends FormRequest
@@ -24,11 +25,19 @@ class ExportReport extends FormRequest
     public function rules()
     {
         return [
-            'from'   => 'required|date|before_or_equal:to',
-            'to'     => 'required|date|after:from',
-            'cols'   => 'required|array|min:1',
-            'cols.*' => 'required|in:' . implode(',', config('report.cols'))
+            'from'      => 'required|date|before_or_equal:to',
+            'to'        => 'required|date|after:from',
+            'cols'      => 'required|array|min:1',
+            'cols.*'    => 'required|in:' . implode(',', config('report.cols')),
+            'extension' => 'nullable|in:' . $this->getExportStringExtensions()
         ];
+    }
+
+    private function getExportStringExtensions()
+    {
+        $extensions = (new \ReflectionClass(Excel::class))->getConstants();
+
+        return implode(',', $extensions);
     }
 
     /**
@@ -39,10 +48,11 @@ class ExportReport extends FormRequest
     public function attributes()
     {
         return [
-            'from'   => __('reports.risks.from'),
-            'to'     => __('reports.risks.to'),
-            'cols'   => __('reports.risks.cols'),
-            'cols.*' => __('reports.risks.col')
+            'from'      => __('reports.risks.from'),
+            'to'        => __('reports.risks.to'),
+            'cols'      => __('reports.risks.cols'),
+            'cols.*'    => __('reports.risks.col'),
+            'extension' => __('reports.extension')
         ];
     }
 }

@@ -8,6 +8,8 @@ use Illuminate\Support\ServiceProvider;
 use App\ViewComposers\RiskViewComposer;
 use App\ViewComposers\RiskMetricColorViewComposer;
 
+use App\ViewComposers\ReportViewComposer;
+
 class ComposerServiceProvider extends ServiceProvider
 {
     /**
@@ -35,6 +37,10 @@ class ComposerServiceProvider extends ServiceProvider
 
             RiskMetricColorViewComposer::class => [
                 'metrics'
+            ],
+
+            ReportViewComposer::class => [
+                'reports.index'
             ]
         ]);
     }

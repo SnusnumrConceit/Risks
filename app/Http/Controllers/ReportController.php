@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Arr;
+use App\Exports\RisksExport;
 use App\Http\Requests\Report\ExportReport;
 
 class ReportController extends Controller
@@ -24,6 +26,9 @@ class ReportController extends Controller
      */
     public function export(ExportReport $request)
     {
-        return back()->withSuccess('Экспорт успешно завершён');
+        $filters   = $request->validated();
+        $extension = Arr::pull($filters, 'extension');
+
+        return new RisksExport($request->validated(), $extension);
     }
 }

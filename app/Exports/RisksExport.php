@@ -92,6 +92,7 @@ class RisksExport implements FromCollection, Responsable, WithHeadings, WithMapp
     public function collection()
     {
         return Risk::with('factors:id,name', 'types:id,name', 'division:id,name')
+            ->whereIn('division_id', auth()->user()->getDivisions()->pluck('id')->all())
             ->whereBetween(
                 'created_at',
                 [$this->filters->from . ' 00:00:00', $this->filters->to . ' 23:59:59']

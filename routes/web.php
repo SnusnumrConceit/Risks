@@ -25,4 +25,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('types', TypeController::class);
     Route::resource('users', UserController::class);
     Route::get('/metrics', 'MetricController@index')->name('metrics.index');
+    Route::get('/reports', 'ReportController@index')->name('reports.index');
+    Route::post('/reports/export', 'ReportController@export')->name('reports.export');
 });

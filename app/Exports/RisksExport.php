@@ -3,9 +3,8 @@
 namespace App\Exports;
 
 use App\Risk;
-use Carbon\Carbon;
-use Illuminate\Support\Str;
 use Maatwebsite\Excel\Excel;
+use App\Services\RiskExportDataService;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\WithStyles;
 use Maatwebsite\Excel\Concerns\WithMapping;
@@ -19,9 +18,10 @@ class RisksExport implements FromCollection, Responsable, WithHeadings, WithMapp
 {
     use Exportable;
 
-    public $fileName    = 'risks',
+    private $fileName    = 'risks',
             $writerType = Excel::XLSX,
-            $filters    = [];
+            $filters    = [],
+            $riskExportDataService;
 
     /**
      * @param array $filters
@@ -35,6 +35,7 @@ class RisksExport implements FromCollection, Responsable, WithHeadings, WithMapp
             $this->writerType = $extension;
         }
 
+        $this->riskExportDataService = app(RiskExportDataService::class);
         $this->fileName = $this->getPreparedFileName();
     }
 
@@ -45,8 +46,8 @@ class RisksExport implements FromCollection, Responsable, WithHeadings, WithMapp
      */
     public function getPreparedFileName() : string
     {
-        $from = $this->getMappedDate($this->filters->from);
-        $to   = $this->getMappedDate($this->filters->to);
+        $from = $this->riskExportDataService->getMappedDate($this->filters->from);
+        $to   = $this->riskExportDataService->getMappedDate($this->filters->to);
 
         return implode('-', [$from, $to, $this->fileName]) . '.' . strtolower($this->writerType);
     }
@@ -60,7 +61,6 @@ class RisksExport implements FromCollection, Responsable, WithHeadings, WithMapp
     {
         $headings = [
             __('risks.name'),
-            __('divisions.division')
         ];
 
         foreach (config('report.cols') as $col) {
@@ -92,88 +92,47 @@ class RisksExport implements FromCollection, Responsable, WithHeadings, WithMapp
      */
     public function collection()
     {
-        return Risk::with('factors:id,name', 'types:id,name', 'division:id,name')
+        return collect(Risk::with($this->riskExportDataService->getRelations($this->filters->cols))
             ->whereIn('division_id', auth()->user()->getDivisions()->pluck('id')->all())
             ->whereBetween(
                 'created_at',
                 [$this->filters->from . ' 00:00:00', $this->filters->to . ' 23:59:59']
-            )->get();
+            )->get($this->riskExportDataService->getQueryCols($this->filters->cols))
+            ->groupBy('division.name')
+            ->all()
+        );
+    }
+
+    /**
+     * Подготовка коллекции
+     * Поскольку map производится без ключей,
+     * то необходимо добавить заголовок (подразделение)
+     * на этапе подготовки
+     * в начало коллекции
+     *
+     * @param $rows
+     * @return mixed
+     */
+    public function prepareRows($rows)
+    {
+        foreach ($rows as $division => $records) {
+            $records->prepend($division);
+        }
+
+        return $rows;
     }
 
     /**
      * Получить сформированные данные к табличному представлению
      *
-     * @param \App\Risk $risk
+     * @param $risksWithHeading
      * @return array
      */
-    public function map($risk): array
+    public function map($risksWithHeading): array
     {
-        $records = $risk->only(array_merge(['name', 'division'], $this->filters->cols));
-        $records['division'] = optional($records['division'])->name;
-
-        foreach ($records as $attribute => $record) {
-            if (in_array($attribute, ['level', 'status'])) {
-                $records[$attribute] = __(implode('.', ['risks', Str::plural($attribute), $record]));
-
-                continue;
-            }
-
-            if ($attribute === 'factors') {
-                $records[$attribute] = $this->getMappedFactors($record);
-
-                continue;
-            }
-
-            if ($attribute === 'types') {
-                $records[$attribute] = $this->getMappedTypes($record);
-
-                continue;
-            }
-
-            if (in_array($attribute, ['created_at', 'expired_at'])) {
-                $records[$attribute] = $this->getMappedDate($record);
-
-                continue;
-            }
-        }
-
-        return $records;
-    }
-
-    /**
-     * Подготовленные виды рисков
-     *
-     * @param $types
-     * @return string
-     */
-    public function getMappedTypes($types)
-    {
-        $types = $types->pluck('name')->all();
-
-        return empty($types) ? '' : implode(', ', $types);
-    }
-
-    /**
-     * Подготовленные факторы рисков
-     *
-     * @param $factors
-     * @return string
-     */
-    public function getMappedFactors($factors)
-    {
-        $factors = $factors->pluck('name')->all();
-
-        return empty($factors) ? '' : implode(', ', $factors);
-    }
-
-    /**
-     * Подготовленная дата
-     *
-     * @param string $date
-     * @return string
-     */
-    public function getMappedDate(string $date) : string
-    {
-        return Carbon::parse($date)->format('d.m.Y');
+        return array_merge(
+            [[$risksWithHeading->pull(0)]],
+            $this->riskExportDataService->getRisksMappedData($risksWithHeading, $this->filters->cols)
+        );
     }
 }

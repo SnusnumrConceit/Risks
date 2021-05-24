@@ -12,6 +12,7 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 use Illuminate\Contracts\Support\Responsable;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 class RisksExport implements FromCollection, Responsable, WithHeadings, WithMapping, ShouldAutoSize, WithStyles
@@ -21,6 +22,8 @@ class RisksExport implements FromCollection, Responsable, WithHeadings, WithMapp
     private $fileName    = 'risks',
             $writerType = Excel::XLSX,
             $filters    = [],
+            $risksByDivisions = null,
+            $divisionRows = [],
             $riskExportDataService;
 
     /**
@@ -77,12 +80,26 @@ class RisksExport implements FromCollection, Responsable, WithHeadings, WithMapp
      *
      * @param Worksheet $sheet
      * @return array
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     public function styles(Worksheet $sheet)
     {
-        return [
-            1 => ['font' => ['bold' => true]] // первая строка выделена жирным
-        ];
+        $highestColumn = $sheet->getHighestColumn();
+
+        foreach ($sheet->getRowIterator() as $row) {
+            if (in_array($index = $row->getRowIndex(), $this->divisionRows)) {
+                $sheet->mergeCells($this->getDivisionLine($index, $highestColumn));
+            }
+        }
+
+        $styles = array_fill_keys($this->divisionRows, [
+            'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER],
+            'font' => ['bold' => true],
+        ]);
+        $styles['1'] = ['font' => ['bold' => true]];
+        ksort($styles);
+
+        return $styles;
     }
 
     /**
@@ -92,7 +109,7 @@ class RisksExport implements FromCollection, Responsable, WithHeadings, WithMapp
      */
     public function collection()
     {
-        return collect(Risk::with($this->riskExportDataService->getRelations($this->filters->cols))
+        $this->risksByDivisions = collect(Risk::with($this->riskExportDataService->getRelations($this->filters->cols))
             ->whereIn('division_id', auth()->user()->getDivisions()->pluck('id')->all())
             ->whereBetween(
                 'created_at',
@@ -101,22 +118,28 @@ class RisksExport implements FromCollection, Responsable, WithHeadings, WithMapp
             ->groupBy('division.name')
             ->all()
         );
+
+        return $this->risksByDivisions;
     }
 
     /**
      * Подготовка коллекции
-     * Поскольку map производится без ключей,
-     * то необходимо добавить заголовок (подразделение)
-     * на этапе подготовки
-     * в начало коллекции
+     * Поскольку map производится без ключей, то необходимо добавить заголовок (подразделение)
+     * на этапе подготовки в начало коллекции
+     * Определение строк, на которых располагаются Подразделения
      *
      * @param $rows
      * @return mixed
      */
     public function prepareRows($rows)
     {
+        $position = 2;
+
         foreach ($rows as $division => $records) {
+            array_push($this->divisionRows, $position);
+
             $records->prepend($division);
+            $position += count($records);
         }
 
         return $rows;
@@ -134,5 +157,17 @@ class RisksExport implements FromCollection, Responsable, WithHeadings, WithMapp
             [[$risksWithHeading->pull(0)]],
             $this->riskExportDataService->getRisksMappedData($risksWithHeading, $this->filters->cols)
         );
+    }
+
+    /**
+     * Получить строку Подразделения
+     *
+     * @param int $index
+     * @param string $column
+     * @return string
+     */
+    protected function getDivisionLine(int $index, string $column)
+    {
+        return "A{$index}:{$column}{$index}";
     }
 }

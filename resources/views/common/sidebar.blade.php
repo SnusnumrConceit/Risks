@@ -57,25 +57,25 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{ route('reports.index', ['from' => now()->subMonths(1)->toDateString(), 'to' => now()->toDateString()]) }}">
+                <a class="nav-link" href="{{ route('reports.index', ['from' => now()->startOfMonth(1)->toDateString(), 'to' => now()->toDateString()]) }}">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
                     {{ __('reports.period.current_month') }}
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{ route('reports.index', ['from' => now()->subMonths(3)->toDateString(), 'to' => now()->toDateString()]) }}">
+                <a class="nav-link" href="{{ route('reports.index', ['from' => now()->startOfQuarter()->toDateString(), 'to' => now()->toDateString()]) }}">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
                     {{ __('reports.period.quarter') }}
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{ route('reports.index', ['from' => now()->subMonths(6)->toDateString(), 'to' => now()->toDateString()]) }}">
+                <a class="nav-link" href="{{ route('reports.index', ['from' => ( now()->month < 7 ? now()->startOfYear() : now()->startOfYear()->addMonth(6))->toDateString(), 'to' => now()->toDateString()]) }}">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
                     {{ __('reports.period.half_year') }}
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{ route('reports.index', ['from' => now()->subYear()->toDateString(), 'to' => now()->toDateString()]) }}">
+                <a class="nav-link" href="{{ route('reports.index', ['from' => now()->startOfYear()->toDateString(), 'to' => now()->toDateString()]) }}">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
                     {{ __('reports.period.year') }}
                 </a>

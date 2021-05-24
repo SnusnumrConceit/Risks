@@ -18,7 +18,9 @@ class RiskExportDataService
      */
     public function getQueryCols(array $cols) : array
     {
-        Arr::forget($cols, ['factors, types']);
+        $cols = array_filter($cols, function ($col) {
+            return ! in_array($col, ['types', 'factors']);
+        });
 
         return array_merge(['name', 'division_id'], $cols);
     }

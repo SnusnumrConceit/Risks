@@ -26,7 +26,12 @@
                     </div>
                     <div class="col-auto">
                         <select name="role" id="role" class="form-control">
-                            <option value="">{{ __('roles.role') }}</option>
+                            <option value=""
+                                    disabled
+                                    @empty(request('role')) selected @endempty
+                            >
+                                {{ __('roles.role') }}
+                            </option>
                             @foreach($roles as $role)
                                 <option value="{{ $role->uuid }}"
                                         @if(request('role') === $role->uuid) selected @endif
@@ -39,6 +44,9 @@
                     <div class="col-auto">
                         <button class="btn btn-outline-success" type="submit">
                             {{ __('ui.search') }}
+                        </button>
+                        <button class="btn btn-outline-secondary" type="reset">
+                            &times;
                         </button>
                     </div>
             </div>

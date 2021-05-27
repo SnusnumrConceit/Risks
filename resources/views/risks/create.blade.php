@@ -105,7 +105,6 @@
                             name="likelihood"
                             id="likelihood"
                     >
-                        <option value="">{{ __('risks.likelihood') }}</option>
                         @for($likelihood = 1; $likelihood <= 5; $likelihood++)
                             <option value="{{ $likelihood }}"
                                     @if(intval($likelihood) === intval(old('likelihood'))) selected @endif
@@ -129,7 +128,6 @@
                             name="impact"
                             id="impact"
                     >
-                        <option value="">{{ __('risks.impact') }}</option>
                         @for($impact = 1; $impact <=5; $impact++)
                             <option value="{{ $impact }}"
                                     @if(intval($impact) === intval(old('impact'))) selected @endif
@@ -153,7 +151,6 @@
                             id="level"
                             class="form-control @if($errors->has('level')) is-invalid @endif"
                     >
-                        <option value="">{{ __('risks.level') }}</option>
                         @foreach(\App\Risk::getLevels() as $level)
                             <option value="{{ $level }}"
                                     @if(old('level') === $level) selected @endif

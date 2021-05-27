@@ -30,6 +30,9 @@
                             <button class="btn btn-outline-success" type="submit">
                                 {{ __('ui.search') }}
                             </button>
+                            <button class="btn btn-outline-secondary" type="reset">
+                                &times;
+                            </button>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -55,7 +58,11 @@
                             <select class="form-control"
                                     name="likelihood"
                             >
-                                <option value="">{{ __('risks.likelihood') }}</option>
+                                <option value=""
+                                        disabled
+                                        @empty(request('likelihood')) selected @endif>
+                                    {{ __('risks.likelihood') }}
+                                </option>
                                 @for($likelihood = 1; $likelihood <= 5; $likelihood++)
                                     <option value="{{ $likelihood }}"
                                             @if(intval($likelihood) === intval(request('likelihood'))) selected @endif
@@ -69,7 +76,11 @@
                             <select class="form-control"
                                     name="impact"
                             >
-                                <option value="">{{ __('risks.impact') }}</option>
+                                <option value=""
+                                        disabled
+                                        @empty(request('impact')) selected @endif>
+                                    {{ __('risks.impact') }}
+                                </option>
                                 @for($impact = 1; $impact <=5; $impact++)
                                     <option value="{{ $impact }}"
                                             @if(intval($impact) === intval(request('impact'))) selected @endif
@@ -81,7 +92,11 @@
                         </div>
                         <div class="col-lg-3">
                             <select name="level" class="form-control">
-                                <option value="">{{ __('risks.level') }}</option>
+                                <option value=""
+                                        disabled
+                                        @empty(request('level')) selected @endif>
+                                    {{ __('risks.level') }}
+                                </option>
                                 @foreach(\App\Risk::getLevels() as $level)
                                     <option value="{{ $level }}"
                                             @if(request('level') === $level) selected @endif
@@ -93,7 +108,11 @@
                         </div>
                         <div class="col-lg-3">
                             <select name="status" class="form-control">
-                                <option value="">{{ __('risks.status') }}</option>
+                                <option value=""
+                                        disabled
+                                        @empty(request('status')) selected @endif>
+                                    {{ __('risks.status') }}
+                                </option>
                                 @foreach(\App\Risk::getStatuses() as $status)
                                     <option value="{{ $status }}"
                                             @if(request('status') === $status) selected @endif

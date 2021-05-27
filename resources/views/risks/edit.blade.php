@@ -174,8 +174,8 @@
                                 <input type="checkbox"
                                        name="types[]"
                                        id="type-{{ $type->id }}"
-                                       value="{{ old('types.' . $key, $type->id) }}"
-                                       @if($risk->types->contains('id', $type->id)) checked @endif>
+                                       value="{{ $type->id }}"
+                                       @if($risk->types->contains('id', $type->id) || in_array($type->id, old('types', []))) checked @endif>
                                 {{ $type->name }}
                             </label>
                         </div>
@@ -190,8 +190,8 @@
                                 <input type="checkbox"
                                        name="factors[]"
                                        id="factor-{{ $factor->id }}"
-                                       value="{{ old('factors.' . $key, $factor->id) }}"
-                                       @if($risk->factors->contains('id', $factor->id)) checked @endif
+                                       value="{{ $factor->id }}"
+                                       @if($risk->factors->contains('id', $factor->id) || in_array($factor->id, old('factors', []))) checked @endif
                                 >
                                 {{ $factor->name }}
                             </label>
@@ -203,8 +203,8 @@
                                     <input type="checkbox"
                                            name="factors[]"
                                            id="factor-{{ $child->id }}"
-                                           value="{{ old('factors.' . $key, $child->id) }}"
-                                           @if($risk->factors->contains('id', $child->id)) checked @endif
+                                           value="{{ $child->id }}"
+                                           @if($risk->factors->contains('id', $child->id) || in_array($child->id, old('factors', []))) checked @endif
                                     >
                                     {{ $child->name }}
                                 </label>

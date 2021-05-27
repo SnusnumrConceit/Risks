@@ -171,7 +171,12 @@
                     @foreach(\App\Type::orderBy('name')->get() as $key => $type)
                         <div class="row col">
                             <label for="type-{{ $type->id }}">
-                                <input type="checkbox" name="types[]" id="type-{{ $type->id }}" value="{{ old('types.' . $key, $type->id) }}">
+                                <input type="checkbox"
+                                       name="types[]"
+                                       id="type-{{ $type->id }}"
+                                       value="{{ $type->id }}"
+                                       @if(in_array($type->id, old('types', []))) checked @endif
+                                >
                                 {{ $type->name }}
                             </label>
                         </div>
@@ -186,10 +191,12 @@
                                     <input type="checkbox"
                                            name="factors[]"
                                            id="factor-{{ $factor->id }}"
-                                           value="{{ old('factors.' . $key, $factor->id) }}">
+                                           value="{{ $factor->id }}"
+                                           @if(in_array($factor->id, old('factors', []))) checked @endif>
                                 {{ $factor->name }}
                             </label>
                         </div>
+
                         @forelse($factor->children as $child)
                             <div class="row col">
                                 <label for="factor-{{ $child->id }}">
@@ -197,7 +204,9 @@
                                     <input type="checkbox"
                                            name="factors[]"
                                            id="factor-{{ $child->id }}"
-                                           value="{{ old('factors.' . $key, $child->id) }}">
+                                           value="{{ $child->id }}"
+                                           @if(in_array($child->id, old('factors', []))) checked @endif
+                                    >
                                     {{ $child->name }}
                                 </label>
                             </div>

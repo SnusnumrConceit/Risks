@@ -28,16 +28,32 @@ class ExportReport extends FormRequest
             'from'      => 'required|date|before_or_equal:to',
             'to'        => 'required|date|after:from',
             'cols'      => 'required|array|min:1',
-            'cols.*'    => 'required|in:' . implode(',', config('report.cols')),
+            'cols.*'    => 'required|in:' . $this->getStringRequiredCols(),
             'extension' => 'nullable|in:' . $this->getExportStringExtensions()
         ];
     }
 
-    private function getExportStringExtensions()
+    /**
+     * Расширения в строковом формате
+     *
+     * @return string
+     * @throws \ReflectionException
+     */
+    private function getExportStringExtensions() : string
     {
         $extensions = (new \ReflectionClass(Excel::class))->getConstants();
 
         return implode(',', $extensions);
+    }
+
+    /**
+     * Колонки в строковом формате
+     *
+     * @return string
+     */
+    private function getStringRequiredCols() : string
+    {
+        return implode(',', config('report.cols'));
     }
 
     /**

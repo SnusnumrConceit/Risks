@@ -5,7 +5,6 @@ namespace App\Services;
 
 
 use Carbon\Carbon;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
 class RiskExportDataService
@@ -22,7 +21,7 @@ class RiskExportDataService
             return ! in_array($col, ['types', 'factors']);
         });
 
-        return array_merge(['id', 'name', 'division_id'], $cols);
+        return array_merge(['id', 'name', 'division_id', 'summa', 'damage'], $cols);
     }
 
     /**
@@ -56,7 +55,7 @@ class RiskExportDataService
         $lines = [];
 
         foreach ($risks as $key => $risk) {
-            $params = $risk->only(array_merge(['name'], $cols));
+            $params = $risk->only(array_merge(['name'], $cols, ['summa', 'damage']));
 //            $params['division'] = optional($params['division'])->name;
 
             foreach ($params as $attribute => $param) {

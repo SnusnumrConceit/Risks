@@ -72,6 +72,9 @@ class RisksExport implements FromCollection, Responsable, WithHeadings, WithMapp
             array_push($headings, __('risks.' . $col));
         }
 
+        array_push($headings, __('risks.summa'));
+        array_push($headings, __('risks.damage'));
+
         return $headings;
     }
 

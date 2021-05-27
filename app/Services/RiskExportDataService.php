@@ -22,7 +22,7 @@ class RiskExportDataService
             return ! in_array($col, ['types', 'factors']);
         });
 
-        return array_merge(['name', 'division_id'], $cols);
+        return array_merge(['id', 'name', 'division_id'], $cols);
     }
 
     /**

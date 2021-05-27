@@ -133,7 +133,7 @@
                                             aria-expanded="false">
                                         {{ __('types.types') }}
                                     </button>
-                                    <ul class="dropdown-menu" aria-labelledby="types-filter">
+                                    <ul class="dropdown-menu dropdown-keep-opened" aria-labelledby="types-filter">
                                         @foreach(\App\Type::orderBy('name')->get() as $key => $type)
                                             <li>
                                                 <label class="dropdown-item" for="type-{{ $type->id }}">
@@ -161,7 +161,7 @@
                                             aria-expanded="false">
                                         {{ __('factors.factors') }}
                                     </button>
-                                    <ul class="dropdown-menu" aria-labelledby="factors-filter">
+                                    <ul class="dropdown-menu dropdown-keep-opened" aria-labelledby="factors-filter">
                                         @foreach(\App\Factor::orderBy('name')->orphans()->get() as $key => $factor)
                                             <li>
                                                 <label class="dropdown-item" for="factor-{{ $factor->id }}">

@@ -5,8 +5,9 @@
  */
 
 require('./bootstrap');
+require('./extensions/dropdown-keep-opened');
 
-window.Vue = require('vue');
+import Vue from 'vue';
 
 /**
  * The following block of code may be used to automatically register your

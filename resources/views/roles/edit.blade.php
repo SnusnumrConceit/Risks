@@ -52,7 +52,7 @@
                                                name="permissions[]"
                                                id="permission-{{ $permission->id }}"
                                                value="{{ $permission->id }}"
-                                               @if($role->permissions->contains('id', $permission->id)) checked @endif
+                                               @if($role->permissions->contains('id', $permission->id) || in_array($permission->id, old('permissions', []))) checked @endif
                                         >
                                         {{ __('permissions.' . $permission->name) }}
                                     </label>

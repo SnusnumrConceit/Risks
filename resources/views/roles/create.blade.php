@@ -48,7 +48,12 @@
                             @foreach($permissions as $permission)
                                 <div class="form-group">
                                     <label for="permission-{{ $permission->id }}">
-                                        <input type="checkbox" id="permission-{{ $permission->id }}" name="permissions[]" value="{{ $permission->id }}">
+                                        <input type="checkbox"
+                                               id="permission-{{ $permission->id }}"
+                                               name="permissions[]"
+                                               value="{{ $permission->id }}"
+                                               @if(in_array($permission->id, old('permissions', []))) checked @endif
+                                        >
                                         {{ __('permissions.' . $permission->name) }}
                                     </label>
                                 </div>

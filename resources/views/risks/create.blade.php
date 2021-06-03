@@ -64,23 +64,6 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="damage">
-                        {{ __('risks.damage') }}
-                    </label>
-                    <input type="number"
-                           class="form-control @if($errors->has('damage')) is-invalid @endif"
-                           name="damage"
-                           id="damage"
-                           value="{{ old('damage') }}"
-                    >
-                    @if($errors->has('damage'))
-                        <span class="invalid-feedback">
-                            {{ $errors->first('damage') }}
-                        </span>
-                    @endif
-                </div>
-
-                <div class="form-group">
                     <label for="expired_at">
                         {{ __('risks.expired_at') }}
                     </label>

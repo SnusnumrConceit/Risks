@@ -13,10 +13,28 @@ class UpdateRisk extends StoreRisk
      */
     public function rules()
     {
-        $rules = parent::rules();
+        return array_merge(
+            parent::rules(),
+            [
+                'status' => 'required|in:' . implode(',', Risk::getStatuses()),
+                'damage' => 'nullable|between:0,99999999.00',
+            ]
+        );
+    }
 
-        $rules['status'] = 'required|in:' . implode(',', Risk::getStatuses());
-
-        return $rules;
+    /**
+     * Атрибуты валидации
+     *
+     * @return array
+     */
+    public function attributes()
+    {
+        return array_merge(
+            parent::attributes(),
+            [
+                'damage'      => __('risks.damage'),
+                'status'      => __('risks.status'),
+            ]
+        );
     }
 }

@@ -57,6 +57,8 @@ class RisksExport implements FromCollection, Responsable, WithHeadings, WithMapp
     {
         return [
             AfterSheet::class => function (AfterSheet $event) {
+                if ($this->totals->isEmpty()) return;
+
                 /** добавление последней итоговой строки */
                 $event->sheet->appendRows(array(
                     array_merge(
@@ -156,17 +158,18 @@ class RisksExport implements FromCollection, Responsable, WithHeadings, WithMapp
      */
     public function collection()
     {
-        $this->risksByDivisions = collect(Risk::with($this->riskExportDataService->getRelations($this->filters->cols))
+        $this->risksByDivisions = collect(($selectedRisks = Risk::with($this->riskExportDataService->getRelations($this->filters->cols))
             ->whereIn('division_id', auth()->user()->getDivisions()->pluck('id')->all())
             ->whereBetween(
                 'created_at',
                 [$this->filters->from . ' 00:00:00', $this->filters->to . ' 23:59:59']
-            )->get($this->riskExportDataService->getQueryCols($this->filters->cols))
+            )->get($this->riskExportDataService->getQueryCols($this->filters->cols)))
             ->groupBy('division.name')
             ->all()
         );
 
-        $this->totals = Risk::with('division:id,name')
+        $this->totals = Risk::whereIn('id', $selectedRisks->pluck('id')->all())
+            ->with('division:id,name')
             ->select(
                 'division_id',
                 DB::raw('SUM(summa) as summa'),

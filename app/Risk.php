@@ -115,10 +115,10 @@ class Risk extends Model
      * @param $q
      * @return mixed
      */
-    public static function scopeExpired($q)
+    public static function scopeExpiring($q)
     {
         return $q->whereIn('status', [self::STATUS_CREATED, self::STATUS_PROCESSING])
-            ->where('expired_at', '>=', now()->toDateString() . ' 00:00:00');
+            ->where('expired_at', '<', now()->toDateString() . ' 00:00:00');
     }
 
     /**

@@ -26,7 +26,7 @@ class RiskExpiredListener
         foreach ($this->risks as $risk) {
             $divisionsIds = explode(
                 '/',
-                substr($risk->division->path, 0, strpos($risk->division->path, (string) $risk->id) + 1)
+                substr($risk->division->path, 0, strpos($risk->division->path, (string) $risk->division_id) + 1)
             );
 
             Notification::send($this->getParticipants($divisionsIds), new RiskExpiredNotification($this->beforeExpired, $risk));

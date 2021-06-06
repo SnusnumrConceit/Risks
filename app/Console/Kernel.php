@@ -27,10 +27,10 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->call(function () {
-            Risk::expired()->update([
+            Risk::expiring()->update([
                 'status' => Risk::STATUS_EXPIRED
             ]);
-        })->daily();
+        })->everyMinute(); // TODO для тестирования
 
         $schedule->call(function () {
             for ($beforeDays = 0; $beforeDays <= 3; $beforeDays++) {
@@ -38,7 +38,7 @@ class Kernel extends ConsoleKernel
 
                 event(RiskExpired::class, $beforeDays);
             }
-        })->daily();
+        })->everyMinute(); // TODO для тестирования
         // $schedule->command('inspire')->hourly();
     }
 

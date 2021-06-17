@@ -17,31 +17,42 @@
                         <div class="row my-4">
                             @if($risks_amount)
                             {{-- Суммарная метрика по рискам --}}
-                                <div class="col-md-6">
-                                    <risks-amount-metric
-                                        :headers="['{{ __('risks.risks') }}']"
-                                        label="{{ __('risks.risks') }}"
-                                        :data="[{{ $risks_amount }}]"
-                                        :colors="['rgb(54, 162, 235)']"  синий
-                                    />
+                                <div class="col-12">
+                                    <div class="card h-100">
+                                        <div class="card-header bg-white text-center border-0">
+                                            {{ __('ui.total') }}
+                                        </div>
+                                        <div class="card-body d-flex flex-column justify-content-center">
+                                            <a class="display-4 text-center text-decoration-none text-success mb-3"
+                                                href="{{ route('risks.index') }}">
+                                                {{ $risks_amount }}
+                                            </a>
+                                        </div>
+                                    </div>
+{{--                                    <risks-amount-metric--}}
+{{--                                        :headers="['{{ __('risks.risks') }}']"--}}
+{{--                                        label="{{ __('risks.risks') }}"--}}
+{{--                                        :data="[{{ $risks_amount }}]"--}}
+{{--                                        :colors="['rgb(54, 162, 235)']"  синий--}}
+{{--                                    />--}}
                                 </div>
                             @endif
-                            @if($risks_divisions_metric)
-                                {{-- Суммарная метрика по головным подразделениям --}}
-                                <div class="col-md-6">
-                                    <risks-divisions-metric
-                                        :headers="['{{ implode("', '", array_keys($risks_divisions_metric)) }}']"
-                                        label="{{ __('divisions.divisions') }}"
-                                        :data="[{{ implode(',', $divisions = array_values($risks_divisions_metric)) }}]"
-                                        :colors="[
-                                    @foreach($divisions as $division)
-                                            '{{ generate_color() }}',
-                                    @endforeach
-                                            ]"
-                                    />
-                                </div>
-                            @endif
-                        </div>
+{{--                            @if($risks_divisions_metric)--}}
+{{--                                --}}{{-- Суммарная метрика по головным подразделениям --}}
+{{--                                <div class="col-md-6">--}}
+{{--                                    <risks-divisions-metric--}}
+{{--                                        :headers="['{{ implode("', '", array_keys($risks_divisions_metric)) }}']"--}}
+{{--                                        label="{{ __('divisions.divisions') }}"--}}
+{{--                                        :data="[{{ implode(',', $divisions = array_values($risks_divisions_metric)) }}]"--}}
+{{--                                        :colors="[--}}
+{{--                                    @foreach($divisions as $division)--}}
+{{--                                            '{{ generate_color() }}',--}}
+{{--                                    @endforeach--}}
+{{--                                            ]"--}}
+{{--                                    />--}}
+{{--                                </div>--}}
+{{--                            @endif--}}
+{{--                        </div>--}}
 
                         <div class="row my-4">
                             @if($risks_types_metric)

@@ -73,7 +73,7 @@
             <div class="container-fluid flex-fill d-flex">
                 <div class="row flex-fill">
                     @includeUnless(request()->routeIs('login'), 'common.sidebar')
-                    <div class="col fluid mt-4 pb-4 py-4">
+                    <div class="col-sm-10 fluid mt-4 pb-4 py-4">
                         @include('common.alerts')
                         @yield('content')
                     </div>

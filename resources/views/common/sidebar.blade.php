@@ -1,4 +1,4 @@
-<nav class="bg-white col-md-auto d-md-block d-none sidebar border-top shadow-sm">
+<nav class="bg-white col-sm-2 d-md-block d-none sidebar border-top shadow-sm" style="min-height:94vh">
     <div class="sidebar-sticky">
         <ul class="nav flex-column">
             <li class="nav-item py-2">

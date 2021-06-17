@@ -17,7 +17,7 @@
 
             <div class="card card-body">
                 <form>
-                    <div class="form-group row">
+                    <div class="form-group row mb-sm-4">
                         <div class="col">
                             <input type="text"
                                    class="form-control"
@@ -35,7 +35,7 @@
                             </button>
                         </div>
                     </div>
-                    <div class="form-group row">
+                    <div class="form-group row mb-sm-4">
                         <div class="col-6">
                             <input type="date"
                                    name="created_at"
@@ -53,8 +53,8 @@
                             >
                         </div>
                     </div>
-                    <div class="form-group row">
-                        <div class="col-lg-3">
+                    <div class="form-group row mb-sm-4">
+                        <div class="col-lg-3 col-md-6 mb-sm-4 mb-md-0">
                             <select class="form-control"
                                     name="likelihood"
                             >
@@ -72,7 +72,7 @@
                                 @endfor
                             </select>
                         </div>
-                        <div class="col-lg-3">
+                        <div class="col-lg-3 col-md-6 mb-sm-4 mb-md-0">
                             <select class="form-control"
                                     name="impact"
                             >
@@ -90,7 +90,7 @@
                                 @endfor
                             </select>
                         </div>
-                        <div class="col-lg-3">
+                        <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
                             <select name="level" class="form-control">
                                 <option value=""
                                         disabled
@@ -106,7 +106,7 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="col-lg-3">
+                        <div class="col-lg-3 col-md-6">
                             <select name="status" class="form-control">
                                 <option value=""
                                         disabled
@@ -122,70 +122,70 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="form-group mt-3 row col-12">
-                            <div class="col-lg-3">
-                                <div class="dropdown">
-                                    <button class="btn btn-outline-dark dropdown-toggle"
-                                            type="button"
-                                            id="types-filter"
-                                            data-toggle="dropdown"
-                                            aria-haspopup="true"
-                                            aria-expanded="false">
-                                        {{ __('types.types') }}
-                                    </button>
-                                    <ul class="dropdown-menu dropdown-keep-opened" aria-labelledby="types-filter">
-                                        @foreach(\App\Type::orderBy('name')->get() as $key => $type)
-                                            <li>
-                                                <label class="dropdown-item" for="type-{{ $type->id }}">
-                                                    <input type="checkbox"
-                                                           value="{{ $type->id }}"
-                                                           name="types[]"
-                                                           id="type-{{ $type->id }}"
-                                                           @if(in_array($type->id, request('types', []))) checked @endif
-                                                    >
-                                                    {{ $type->name }}
-                                                </label>
-                                            </li>
-                                        @endforeach
-                                    </ul>
-                                </div>
+                    </div>
+                    <div class="form-group row mb-sm-4 mb-lg-0">
+                        <div class="col-lg-3 col-md-6 mb-sm-4 mb-md-0">
+                            <div class="dropdown">
+                                <button class="form-control dropdown-toggle col"
+                                        type="button"
+                                        id="types-filter"
+                                        data-toggle="dropdown"
+                                        aria-haspopup="true"
+                                        aria-expanded="false">
+                                    {{ __('types.types') }}
+                                </button>
+                                <ul class="dropdown-menu dropdown-keep-opened" aria-labelledby="types-filter">
+                                    @foreach(\App\Type::orderBy('name')->get() as $key => $type)
+                                        <li>
+                                            <label class="dropdown-item" for="type-{{ $type->id }}">
+                                                <input type="checkbox"
+                                                       value="{{ $type->id }}"
+                                                       name="types[]"
+                                                       id="type-{{ $type->id }}"
+                                                       @if(in_array($type->id, request('types', []))) checked @endif
+                                                >
+                                                {{ $type->name }}
+                                            </label>
+                                        </li>
+                                    @endforeach
+                                </ul>
                             </div>
+                        </div>
 
-                            <div class="col-lg-3 ml-2">
-                                <div class="dropdown">
-                                    <button class="btn btn-outline-dark dropdown-toggle"
-                                            type="button"
-                                            id="factors-filter"
-                                            data-toggle="dropdown"
-                                            aria-haspopup="true"
-                                            aria-expanded="false">
-                                        {{ __('factors.factors') }}
-                                    </button>
-                                    <ul class="dropdown-menu dropdown-keep-opened" aria-labelledby="factors-filter">
-                                        @foreach(\App\Factor::orderBy('name')->orphans()->get() as $key => $factor)
-                                            <li>
-                                                <label class="dropdown-item" for="factor-{{ $factor->id }}">
-                                                    <input type="checkbox"
-                                                           value="{{ $factor->id }}"
-                                                           name="factors[]" id="factor-{{ $factor->id }}"
-                                                           @if(in_array($factor->id, request('factors', []))) checked @endif
-                                                    >
-                                                    {{ $factor->name }}
-                                                </label>
-                                            </li>
-                                        @endforeach
-                                    </ul>
-                                </div>
+                        <div class="col-lg-3 col-md-6">
+                            <div class="dropdown">
+                                <button class="form-control dropdown-toggle col"
+                                        type="button"
+                                        id="factors-filter"
+                                        data-toggle="dropdown"
+                                        aria-haspopup="true"
+                                        aria-expanded="false">
+                                    {{ __('factors.factors') }}
+                                </button>
+                                <ul class="dropdown-menu dropdown-keep-opened" aria-labelledby="factors-filter">
+                                    @foreach(\App\Factor::orderBy('name')->orphans()->get() as $key => $factor)
+                                        <li>
+                                            <label class="dropdown-item" for="factor-{{ $factor->id }}">
+                                                <input type="checkbox"
+                                                       value="{{ $factor->id }}"
+                                                       name="factors[]" id="factor-{{ $factor->id }}"
+                                                       @if(in_array($factor->id, request('factors', []))) checked @endif
+                                                >
+                                                {{ $factor->name }}
+                                            </label>
+                                        </li>
+                                    @endforeach
+                                </ul>
                             </div>
+                        </div>
 
-                            <div class="col-lg-3 ml-2">
-                                @if(auth()->user()->is_responsible || auth()->user()->hasPermission('divisions_view'))
-                                    @include('risks.divisions_selector', [
-                                        'divisions' => $divisions,
-                                        'name'      => 'division',
-                                    ])
-                                @endif
-                            </div>
+                        <div class="col-lg-3 mt-sm-4 mt-lg-0">
+                            @if(auth()->user()->is_responsible || auth()->user()->hasPermission('divisions_view'))
+                                @include('risks.divisions_selector', [
+                                    'divisions' => $divisions,
+                                    'name'      => 'division',
+                                ])
+                            @endif
                         </div>
                     </div>
                 </form>
